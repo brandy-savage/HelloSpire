@@ -151,6 +151,10 @@ internal static class PotionUsePatch
             foreach (var v in potion.DynamicVars.Values)
                 if (v is DamageVar or BlockVar) v.BaseValue -= bonus;
 
+        // Joint Venture listens to everyone else's Potions, whatever character they play -- so this
+        // runs before the Alchemist-only gate below, and only reads powers, never attaches one.
+        if (player != null) await JointVenturePower.Notify(ctx, player);
+
         if (!isAlchemist) return;
         var lab = LabContext.From(player!);
 

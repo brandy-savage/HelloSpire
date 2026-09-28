@@ -570,5 +570,18 @@
   "HELLOSPIRE-VOLATILE_LABORATORY.title": "Volatile Laboratory",
   "HELLOSPIRE-VOLATILE_LABORATORY.description": "Whenever you create a Status, [gold]Infuse[/gold] {VolatileLaboratoryPower:diff()} Damage and add a Residual Reagent to your Potion Belt.",
   "HELLOSPIRE-POTENT_MIXTURE.title": "Potent Mixture",
-  "HELLOSPIRE-POTENT_MIXTURE.description": "Gain {PotencyPower:diff()} [gold]Potency[/gold]."
+  "HELLOSPIRE-POTENT_MIXTURE.description": "Gain {PotencyPower:diff()} [gold]Potency[/gold].",
+  "HELLOSPIRE-PASS_THE_BOTTLE.title": "Pass the Bottle",
+  "HELLOSPIRE-PASS_THE_BOTTLE.description": "Give another player one of your Potions. They gain {Energy:energyIcons()}.",
+  "HELLOSPIRE-PASS_THE_BOTTLE.upgrade.description": "Give another player one of your Potions. They gain {Energy:energyIcons()} and draw {Cards} card.",
+  "HELLOSPIRE-SHARED_FLASK.title": "Shared Flask",
+  "HELLOSPIRE-SHARED_FLASK.description": "Another player gains a random Common Potion.",
+  "HELLOSPIRE-SHARED_FLASK.upgrade.description": "Another player gains a Common Potion of your choice from {Choices}.",
+  "HELLOSPIRE-BULK_ORDER.title": "Bulk Order",
+  "HELLOSPIRE-BULK_ORDER.description": "ALL players draw {Cards} card.\nEvery other player gains {Gold:diff()} Gold.",
+  "HELLOSPIRE-SYMPATHETIC_DETONATION.title": "Sympathetic Detonation",
+  "HELLOSPIRE-SYMPATHETIC_DETONATION.description": "Deal {Damage:diff()} damage to ALL enemies, plus {Bonus:diff()} for each other player who has played an Attack this turn.",
+  "HELLOSPIRE-JOINT_VENTURE.title": "Joint Venture",
+  "HELLOSPIRE-JOINT_VENTURE.description": "Whenever another player uses a Potion, they gain {Gold} Gold and you [gold]Brew[/gold] a random Common Potion. Up to {JointVenturePower:diff()} times per combat.",
+  "HELLOSPIRE-ALCHEMIST_GIVE_CHOICE.header": "Choose a Potion to Give"
 }

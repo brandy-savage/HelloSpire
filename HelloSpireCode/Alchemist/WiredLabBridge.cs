@@ -153,6 +153,26 @@ public sealed class WiredLabBridge : ILabBridge
         return picks;
     }
 
+    public IReadOnlyList<PotionModel> GiftPotionOptions(Player recipient, int count)
+    {
+        // The recipient's own pool, so an ally gets Potions their class can actually roll -- and
+        // Common only: these are permanent, handed out by 0-1 cost cards. The Alchemist's own
+        // bench-bound Potions are excluded by name in case the recipient is another Alchemist.
+        var pool = PotionFactory.GetPotionOptions(recipient, [])
+            .Where(p => p.Rarity == PotionRarity.Common)
+            .Where(p => p is not PhilosophersStone and not AurumTincture and not PoisonAmpoule and not UnstableConcoction and not ResidualReagent)
+            .Where(p => !VolatileCommonPool().Contains(p) && !VolatileDrawPool().Contains(p))
+            .ToList();
+        var picks = new List<PotionModel>();
+        while (picks.Count < count && pool.Count > 0)
+        {
+            var pick = recipient.RunState.Rng.CombatPotionGeneration.NextItem(pool);
+            pool.Remove(pick);
+            picks.Add(pick.ToMutable());
+        }
+        return picks;
+    }
+
     public PotionModel? RandomDrawPotion(Player player)
     {
         var options = VolatileDrawPool();

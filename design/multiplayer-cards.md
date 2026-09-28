@@ -1,7 +1,7 @@
 # The Multiplayer Cards — 15
 
-**Status (2026-09-09):** design agreed. The Gunslinger's five are implemented and gated. The
-Alchemist's five are still on paper. **The Paladin section below is stale** — it was written
+**Status (2026-09-28):** design agreed. The Gunslinger's and the Alchemist's five are implemented and
+gated; none has had a real two-player test yet. **The Paladin section below is stale** — it was written
 against the Faith system, which the 2026-08-31 rework cut (`design/paladin-rework-2026-08-31.md`).
 The Paladin now carries *nine* party cards built around Plating, Regen and Thorns rather than the
 five Faith cards described here: Aura of Devotion, Aura of Protection, Aura of Vitality, Beacon of
@@ -205,47 +205,53 @@ Stronger, and correctly so, because it requires other people.
 
 ## The Alchemist — 5
 
-Potions (Brew, Volatile, Distill), Gold (Invest), Transforming, and Max HP (Render). See issue #2
-and issue #4.
+**Built** — `HelloSpireCode/Alchemist/Cards/Multiplayer.cs`, gated on `AlchemistMultiplayerCard`.
+Revised 2026-09-28 from the first draft: the Alchemist is the party's **supplier**. It hands
+other players real Potions and Gold, and is paid in tempo and fresh Brews when they use them.
+
+**Ruling this set depends on:** *a Potion given to another player is permanent.* Volatile
+tracking lives on the Alchemist's own bench and never follows a Potion into someone else's belt,
+so a gift is kept after the fight exactly like a Potion that player found. This also means no
+Alchemist state is ever attached to a non-Alchemist creature.
 
 | # | Card | Type | Cost | Effect | Upgrade |
 |---:|---|---|---:|---|---|
-| 1 | **Pass the Bottle** | Skill | 0 | Choose another player. They gain 1 Energy. Distill one of your Potions. Exhaust. | They also draw 1 card. |
-| 2 | **Shared Flask** | Skill | 1 | Brew a random Common Combat Potion into another player's belt. It is Volatile. Exhaust. | They choose from 3 instead. |
-| 3 | **Bulk Order** | Skill | 1 | You may Invest 8 Gold. If you do, ALL players draw 1 card and gain 1 Energy. Exhaust. | Invest cost becomes 5. |
-| 4 | **Sympathetic Detonation** | Attack | 1 | Deal 7 damage to ALL enemies. Deal 4 additional damage to ALL enemies for each other player who has played an Attack this turn. | Deal 9 damage; the bonus becomes 5. |
-| 5 | **Joint Venture** | Power | 2 | Whenever another player uses a Potion, gain 5 Gold and Brew a random Common Combat Potion. Up to 3 times per combat. | Up to 5 times per combat. |
+| 1 | **Pass the Bottle** | Skill | 0 | Give another player one of your Potions. They gain 1 Energy. Exhaust. | They also draw 1 card. |
+| 2 | **Shared Flask** | Skill | 1 | Another player gains a random Common Potion (from their own pool). Exhaust. | You choose it from 3. |
+| 3 | **Bulk Order** | Skill | 1 | ALL players draw 1 card. Every other player gains 10 Gold. Exhaust. | 15 Gold. |
+| 4 | **Sympathetic Detonation** | Attack | 1 | Deal 7 damage to ALL enemies, plus 4 for each other player who has played an Attack this turn. | 9 damage; the bonus becomes 5. |
+| 5 | **Joint Venture** | Power | 2 | Whenever another player uses a Potion, they gain 5 Gold and you Brew a random Common Potion. Up to 3 times per combat. | Up to 5 times per combat. |
 
-**Solo behaviour.** `Pass the Bottle` gives *you* the Energy (still a real card: Distill a dead
-Potion for 1 Energy at 0 cost). `Shared Flask` Brews into your own belt. `Bulk Order` and
-`Sympathetic Detonation` resolve with a party of one — 8 Gold for a card and an Energy is a fair
-solo rate, and the Detonation is a plain 7 AoE. `Joint Venture` does nothing.
+**Solo behaviour.** `Pass the Bottle` Distills the Potion and gives *you* the Energy (and the
+card, upgraded). `Shared Flask` Brews into your own belt — Volatile, as every self-Brew is, so the
+card never becomes a permanent-Potion printer solo. `Bulk Order` pays the Gold to you, since there
+is no one else. `Sympathetic Detonation` is a plain 7 AoE. `Joint Venture` does nothing.
 
 **Why these five.**
 
-`Pass the Bottle` is the purest expression of the class in the whole pack: a Potion is Transformed
-into somebody else's Energy. Zero cost, Exhausts, and it is the Alchemist's answer to a teammate
-who is one Energy short of the turn that wins the fight.
+`Pass the Bottle` is a Potion literally changing hands. A Potion given away arrives permanent even
+if it was Brewed Volatile — that conversion is the card's value, and Exhaust keeps it to once a
+combat per copy. The Alchemist's bench-bound Potions (Unstable Concoction, Residual Reagent) cannot
+be given; they mean nothing in another belt. If the recipient's belt is full, the Potion stays put
+and they still get the Energy.
 
-`Shared Flask` is the only card in these fifteen that breaks house rule 1, and it earns it. The
-Alchemist is the character who hands people objects; a Volatile Potion in a teammate's belt costs
-that teammate no Energy to use, vanishes at end of combat so it cannot become permanent
-inventory, and is the one thing no other character in the game can do. It is also the highest
-implementation risk in this document — see [Open questions](#open-questions).
+`Shared Flask` is the only card in these fifteen that breaks house rule 1, and it earns it — the
+Alchemist is the character who hands people objects. The gift is drawn from the **recipient's**
+Common pool (`ILabBridge.GiftPotionOptions`), so an Ironclad gets Potions an Ironclad could roll,
+never the Alchemist's weaker Volatile-only set.
 
-`Bulk Order` prices party tempo in real Gold. In a four-player lobby that is 8 Gold for four cards
-and four Energy, which is enormous — and it is enormous *once*, because it Exhausts, and because
-those 8 Gold are gone from the next Merchant. This is the calibration knob if the Alchemist proves
-too strong in co-op: raise the Invest, never lower the payout.
+`Bulk Order` is the Alchemist as the party's bank. The first draft had it *spend* Gold (Invest 8)
+for party Energy; it now *gives* Gold out, which is simpler to read and is the character's party
+role in one line. Tuning knob if co-op Gold inflates: lower the payout, keep the draw.
 
-`Sympathetic Detonation` is the Alchemist's only multiplayer Attack, and it reads the party's turn
-rather than the party's roster. It rewards going *last* in a turn order, which no other card in
-this set does.
+`Sympathetic Detonation` reads the party's turn rather than its roster and rewards going *last*.
+The count lives on the bench (`LabPower.AlliesAttackedThisTurn`, fed by the base game's
+`AfterCardPlayed`), which the starting relic opens at combat start. An Alchemist who has lost the
+Satchel and has done nothing else yet this combat reads a bonus of zero — a known, harmless edge.
 
-`Joint Venture` closes the Alchemist's loop: `Shared Flask` puts a Potion in a teammate's belt,
-they drink it, and the Alchemist is paid 5 Gold and a fresh Potion. The per-combat cap is there
-because issue #4's Gold guardrail is explicit — *any repeatable Gold trigger needs a hard
-per-combat cap*, or the correct play becomes stalling the fight.
+`Joint Venture` closes the loop: give a Potion, they drink it, they get Gold and you get a fresh
+Brew. It is fed from `PotionUsePatch` for every player's Potion use. The per-combat cap is issue
+#4's Gold guardrail — any repeatable Gold trigger needs one, or stalling becomes correct.
 
 ---
 
@@ -272,7 +278,7 @@ interaction and the one to build a playtest around.
 
 ```
 Alchemist    Pass the Bottle       -> Gunslinger gains 1 Energy on a load turn
-Alchemist    Bulk Order            -> everyone draws and gains 1 Energy
+Alchemist    Bulk Order            -> everyone draws a card
 Gunslinger   Ride Together         -> every ally Attack loads a Lead Round
 Alchemist    Sympathetic Detonation-> is an Attack, so it loads the Gunslinger's gun
 ```
@@ -298,13 +304,14 @@ turn to buy that.
 ### Loop 4 — The Potion Round-Trip · Alchemist ↔ everyone
 
 ```
-Alchemist    Shared Flask     -> Volatile Potion into an ally's belt
+Alchemist    Shared Flask     -> permanent Potion into an ally's belt
+Alchemist    Pass the Bottle  -> or hand over one already Brewed
 Ally                          -> drinks it (costs them no Energy)
-Alchemist    Joint Venture    -> +5 Gold, Brew another
-Alchemist    Bulk Order       -> Gold back out as party tempo
+Alchemist    Joint Venture    -> ally +5 Gold, Alchemist Brews another
+Alchemist    Bulk Order       -> more Gold out to the party
 ```
 
-The Alchemist's economy is funded by other people drinking. Note that the loop is capped twice —
+The Alchemist's economy runs through other people drinking — the Gold lands with them, the Brews with the Alchemist. Note that the loop is capped twice —
 `Joint Venture` at 3 triggers a combat, `Bulk Order` by Exhaust — because an uncapped version is
 exactly the stall-to-farm-Gold failure mode issue #4 warns about.
 
@@ -370,8 +377,9 @@ Ordered by how likely each is to be the thing that breaks.
 2. **`Oath of the Company` in a four-stack.** Nine Faith a turn is the theoretical cap. If it lands
    anywhere near that in practice, cut the Tyr clause first — kills are the least countable of the
    three triggers.
-3. **`Bulk Order` in a four-stack.** Four Energy for 8 Gold. Raise the Invest before touching the
-   payout; the whole point is that Gold is real.
+3. **The Alchemist's Gold in a four-stack.** `Bulk Order` prints 30 Gold a play and `Joint Venture`
+   up to 15–25 a combat, all into allies' pockets. Watch shop prices against a party's total Gold;
+   lower the payouts before touching the caps.
 4. **`Ride Together` plus `Empty the Cylinder`/`High Noon`.** Free ammunition into a Fire 6 is the
    Gunslinger's burst ceiling. Verify the salvo cards do not become one-card kills when the gun
    refills for free.
@@ -392,10 +400,10 @@ Ordered by how likely each is to be the thing that breaks.
   `GunslingerMultiplayerCard`; the Paladin's party cards carry the same override per-card. House
   rule 3 still stands — the constraint keeps a card out of the solo *offer*, not out of a solo run
   that continues from a save or a lobby that empties out, so none of them may brick.
-- **Can a card write a Potion into another player's belt?** `Shared Flask` needs it. If the
-  cross-client inventory write turns out not to be available, the fallback is "Brew a Potion; the
-  next ally to use a Potion this combat draws 2 cards", which keeps the flavour and loses the
-  handoff.
+- **Can a card write a Potion into another player's belt?** Built on the assumption that it can:
+  `Belt.Give`/`Belt.Gift` call `PotionCmd.TryToProcure` with the ally as the Player. Verify in a
+  real two-player run that the Potion appears on both clients. If it does not, the fallback is
+  "Brew a Potion; the next ally to use a Potion this combat draws 2 cards".
 - **Does the game expose an ally-target `TargetType`?** `AnyAlly`, `AnyPlayer` and `AllAllies` are
   all in the enum per `TODO.md`, but their exact targeting semantics — can you target yourself with
   `AnyAlly`? what is `Target` when solo? — are unverified. The Gunslinger implementation routes

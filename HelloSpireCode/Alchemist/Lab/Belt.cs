@@ -1,6 +1,7 @@
 using System.Linq;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 
@@ -199,6 +200,68 @@ public static class Belt
 
         return count;
     }
+
+    // ------------------------------------------------------------------ other players' belts
+
+    /// <summary>
+    /// Hand one held Potion to another player. Pass the Bottle.
+    ///
+    /// What arrives is permanent: Volatile tracking lives on the Alchemist's own bench and never
+    /// follows a Potion into someone else's belt, so a gifted Potion outlives the fight like any
+    /// other the recipient found. It arrives as a fresh copy with the same values -- a Potion
+    /// instance already removed from a belt is not safe to Procure again (see PotionUsePatch).
+    ///
+    /// Not a Distill and not a use: neither hook fires. The slot emptying still counts.
+    /// Returns false, keeping the Potion, if the recipient's belt is full or nothing is held.
+    /// </summary>
+    public static async Task<bool> Give(PlayerChoiceContext ctx, LabContext lab, Player recipient)
+    {
+        var held = Held(lab).Where(Giftable).ToList();
+        if (held.Count == 0 || !HasRoom(recipient)) return false;
+
+        var chosen = held.Count == 1
+            ? held[0]
+            : await LabBridge.Current.ChoosePotion(ctx, lab.Player, held,
+                new LocString("cards", "HELLOSPIRE-ALCHEMIST_GIVE_CHOICE.header"));
+        if (chosen == null) return false;
+
+        var copy = chosen.CanonicalInstance.ToMutable();
+        foreach (var key in chosen.DynamicVars.Keys.Cast<string>().ToList())
+            if (copy.DynamicVars.TryGetValue(key, out var copied))
+                copied.BaseValue = chosen.DynamicVars[key].BaseValue;
+
+        if (await LabBridge.Current.Brew(ctx, recipient, copy) == null) return false;
+
+        var bench = AlchemistEffects.Peek(lab);
+        await LabBridge.Current.Discard(ctx, lab.Player, chosen);
+        bench?.Volatile.Remove(chosen);
+        await NotifySlotEmptied(ctx, lab);
+        return true;
+    }
+
+    /// <summary>
+    /// A new permanent Common Potion into another player's belt, from their own pool. Shared
+    /// Flask. With <paramref name="choices"/> above 1 the Alchemist picks from that many.
+    /// Not a Brew -- nothing Volatile is created and no Brew engine fires.
+    /// </summary>
+    public static async Task<PotionModel?> Gift(PlayerChoiceContext ctx, LabContext lab, Player recipient, int choices = 1)
+    {
+        if (!HasRoom(recipient)) return null;
+
+        var options = LabBridge.Current.GiftPotionOptions(recipient, Math.Max(1, choices));
+        if (options.Count == 0) return null;
+
+        var chosen = options.Count == 1
+            ? options[0]
+            : await LabBridge.Current.ChoosePotionOption(ctx, lab.Player, options);
+        return chosen == null ? null : await LabBridge.Current.Brew(ctx, recipient, chosen);
+    }
+
+    private static bool HasRoom(Player player) =>
+        LabBridge.Current.Held(player).Count < LabBridge.Current.SlotCount(player);
+
+    /// <summary>The bench-bound Potions only make sense in an Alchemist's own belt.</summary>
+    private static bool Giftable(PotionModel potion) => potion is not UnstableConcoction and not ResidualReagent;
 
     // ------------------------------------------------------------------ reading the belt
 

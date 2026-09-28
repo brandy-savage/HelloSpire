@@ -121,6 +121,14 @@ public interface ILabBridge
     PotionModel? RandomVolatilePotion(Player player);
 
     /// <summary>
+    /// Up to <paramref name="count"/> DISTINCT random Common Potions from <paramref name="recipient"/>'s
+    /// own real Potion pool -- permanent Potions, never the Alchemist's Volatile-only ones. The
+    /// multiplayer cards hand these to other players (Shared Flask). Same synced-RNG determinism
+    /// as <see cref="CombatPotionOptions"/>.
+    /// </summary>
+    IReadOnlyList<PotionModel> GiftPotionOptions(Player recipient, int count);
+
+    /// <summary>
     /// One of the handful of base-game Potions the Alchemist Brews by name.
     ///
     /// An enum rather than a <c>Type</c> so that no card file has to reference a base-game potion
@@ -289,6 +297,12 @@ public sealed class UnwiredLabBridge : ILabBridge
     {
         Report("the combined Volatile Potion pool");
         return null;
+    }
+
+    public IReadOnlyList<PotionModel> GiftPotionOptions(Player recipient, int count)
+    {
+        Report("the gift Potion pool");
+        return [];
     }
 
     public Task GainSlots(Player player, int count)

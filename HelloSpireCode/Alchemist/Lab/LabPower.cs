@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -100,6 +101,13 @@ public sealed class LabPower : HelloSpirePower
     public int CardsCreatedThisTurn { get; set; }
 
     /// <summary>
+    /// Other players who have played an Attack this turn. Sympathetic Detonation reads the count.
+    /// Filled from the base game's AfterCardPlayed, which every power hears for every player's
+    /// cards -- the same hook Ride Together uses.
+    /// </summary>
+    public readonly HashSet<Player> AlliesAttackedThisTurn = [];
+
+    /// <summary>
     /// The type of the card played immediately before whichever one is currently resolving -- null
     /// before any card has been played this combat. Set by LastCardTypeTrackerPatch, which stashes
     /// the old <see cref="LastCardType"/> here before overwriting it with the new play, so a card
@@ -123,6 +131,7 @@ public sealed class LabPower : HelloSpirePower
         DistilledThisTurn = 0;
         CardsExhaustedThisTurn = 0;
         CardsCreatedThisTurn = 0;
+        AlliesAttackedThisTurn.Clear();
         PoisonMultiplier = 1m;
 
         if (SlotsThisTurn > 0 && Owner.Player is { } player)
@@ -130,6 +139,13 @@ public sealed class LabPower : HelloSpirePower
             await LabBridge.Current.LoseSlots(player, SlotsThisTurn);
             SlotsThisTurn = 0;
         }
+    }
+
+    public override Task AfterCardPlayed(PlayerChoiceContext ctx, CardPlay cardPlay)
+    {
+        if (cardPlay.Card.Type == CardType.Attack && cardPlay.Card.Owner is { } player && player != Owner.Player)
+            AlliesAttackedThisTurn.Add(player);
+        return Task.CompletedTask;
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ using HelloSpire.HelloSpireCode.Powers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -249,4 +250,41 @@ public sealed class BottledFuryStrengthPower : TemporaryStrengthPower
 {
     public override AbstractModel OriginModel => ModelDb.Card<BottledFury>();
     protected override bool IsPositive => true;
+}
+
+/// <summary>
+/// Whenever another player uses a Potion, they gain Gold and you Brew a random Common Potion.
+/// Amount is the number of times it can still fire this combat -- issue #4's rule that any
+/// repeatable Gold trigger carries a hard per-combat cap, or stalling the fight becomes correct.
+///
+/// Fed by PotionUsePatch for every player's Potion use, not through AlchemistHooks: the listener
+/// interfaces there are all "you did X", and this is the one that is "someone else did".
+/// </summary>
+public sealed class JointVenturePower : AlchemistEnginePower
+{
+    public const decimal Gold = 5m;
+
+    public async Task OnOtherPlayerUsedPotion(PlayerChoiceContext ctx, Player drinker)
+    {
+        if (Amount <= 0 || Lab is not { } lab || drinker == lab.Player) return;
+
+        Flash();
+        await PowerCmd.ModifyAmount(ctx, this, -1m, null, null);
+        await PlayerCmd.GainGold(Gold, drinker);
+        await Belt.BrewRandom(ctx, lab);
+    }
+
+    /// <summary>Tell every Joint Venture at the table that <paramref name="drinker"/> used a Potion.</summary>
+    public static async Task Notify(PlayerChoiceContext ctx, Player drinker)
+    {
+        var players = drinker.Creature?.CombatState?.Players;
+        if (players == null) return;
+
+        foreach (var player in players.ToList())
+        {
+            if (player == drinker) continue;
+            if (player.Creature?.GetPower<JointVenturePower>() is { } venture)
+                await venture.OnOtherPlayerUsedPotion(ctx, drinker);
+        }
+    }
 }

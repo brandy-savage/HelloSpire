@@ -232,5 +232,8 @@
   "HELLOSPIRE-SEAL_OF_THE_MARTYR_THORNS_POWER.smartDescription": "Lose [blue]{Amount}[/blue] [gold]Thorns[/gold] at the end of this turn.",
   "HELLOSPIRE-RENEW_POWER.title": "Renew",
   "HELLOSPIRE-RENEW_POWER.description": "At the start of your turn, heal and fade.",
-  "HELLOSPIRE-RENEW_POWER.smartDescription": "At the start of your turn, heal [blue]{Amount}[/blue] HP, then this fades."
+  "HELLOSPIRE-RENEW_POWER.smartDescription": "At the start of your turn, heal [blue]{Amount}[/blue] HP, then this fades.",
+  "HELLOSPIRE-JOINT_VENTURE_POWER.title": "Joint Venture",
+  "HELLOSPIRE-JOINT_VENTURE_POWER.description": "Whenever another player uses a Potion, they gain 5 Gold and you [gold]Brew[/gold] a random Common Potion.",
+  "HELLOSPIRE-JOINT_VENTURE_POWER.smartDescription": "Whenever another player uses a Potion, they gain 5 Gold and you [gold]Brew[/gold] a random Common Potion. [blue]{Amount}[/blue] left this combat."
 }

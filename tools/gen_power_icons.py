@@ -310,6 +310,12 @@ def glyph_brewing_engine():
     return card(C + 40, 74, 58, 80, CREAM, 16) + flask(C - 14, 156, 62, GOLD)
 
 
+def glyph_joint_venture():
+    """Hand a flask across the table, a coin comes back: the party's Potions pay the Alchemist."""
+    coin = (circle(C + 50, 96, 40, GOLD_LT, INK, 6) + circle(C + 50, 96, 26, "none", GOLD_DK, 5))
+    return flask(C - 30, 160, 56, VIOLET) + coin
+
+
 def glyph_bottled_fury():
     """Fury, bottled: the potion is the fuse, the Strength is the burn."""
     bottle = rect(C - 46, 96, 92, 116, 22, CREAM, INK, 6)
@@ -414,6 +420,7 @@ POWERS = {
     "accumulation": ("draw", glyph_accumulation),
     "brewing_engine": ("brew", glyph_brewing_engine),
     "bottled_fury": ("fury", glyph_bottled_fury),
+    "joint_venture": ("brew", glyph_joint_venture),
     # the Paladin's one-turn powers
     "seal_of_righteousness_strength": ("righteous", glyph_seal_of_righteousness_strength),
     "seal_of_the_crusader_strength": ("crusader", glyph_seal_of_the_crusader_strength),

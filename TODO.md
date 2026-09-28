@@ -10,14 +10,14 @@ Every API name here was verified against **game v0.107.1** (`data_sts2_windows_x
 
 ## Status (2026-09-09)
 
-All three characters are content-complete in code and playable end to end: **275 cards, 24 relics,
-31 potions, 74 powers.** Every card has a working upgrade; the only card without an `OnUpgrade` is
+All three characters are content-complete in code and playable end to end: **280 cards, 24 relics,
+31 potions, 75 powers.** Every card has a working upgrade; the only card without an `OnUpgrade` is
 `VolatileResidue`, a Status card, which is correct.
 
 | | Cards | Relics | Potions | Powers | Card art |
 |---|---:|---:|---:|---:|---|
 | Paladin | 86 | 6 | 3 | 35 | 86/86 hand-painted |
-| Alchemist | 85 | 9 | 25 | 18 | 50/85 |
+| Alchemist | 90 | 9 | 25 | 19 | 50/90 (5 placeholder tiles) |
 | Gunslinger | 104 | 9 | 3 | 21 | 104/104 resolve, 85 finished (19 placeholder tiles) |
 
 The 2026-08-30 "Reset" note this replaced is long superseded — the Paladin was rebuilt past it into
@@ -32,8 +32,8 @@ records what replaced it.
   `tools/gen_potion_icons.py` and `tools/gen_power_icons.py` draw every one the pack needs.)
 - Gunslinger — 19 card portraits are still labelled placeholder tiles.
 - Paladin — 3 relic detail images.
-- No `beta/` (upgraded-card) art exists for any of the 275 cards.
-- The Alchemist's five multiplayer cards are still design text only.
+- No `beta/` (upgraded-card) art exists for any of the 280 cards.
+- The Alchemist's five multiplayer cards are built but have placeholder art and no two-player test yet.
 - Ancient dialogue is written for all nine Ancients (108 lines). What is left is one verification, not writing: the eight new Ancient IDs are inferred from wiki display names, and `gen_ancient_dialogue.py check --base <extracted ancients.json>` confirms or corrects them.
 
 See the README's "Known gaps" for the same list with per-file detail.
@@ -410,7 +410,7 @@ Different content → different entry count → different hash. This is why vers
 - [ ] Test the rejection path: have someone join without the pack and confirm a clean `ModMismatch`, not a hang
 - [ ] Version your releases properly — a mod ID match with a content mismatch is the nastiest failure mode
 - [ ] `RemoteTargetingLineColor` / `RemoteTargetingLineOutline` on the character are multiplayer-only visuals; set them or your character looks unfinished in co-op
-- [x] **Gate multiplayer-only cards out of solo runs.** `CardModel.MultiplayerConstraint` returning `CardMultiplayerConstraint.MultiplayerOnly` is the mechanism — pools filter on `RunState.CardMultiplayerConstraint` when asked for unlocked cards, so the `[Pool]` attribute stays as-is. The Paladin's nine party cards carry it per-card; the Gunslinger's five carry it once on `GunslingerMultiplayerCard`.
+- [x] **Gate multiplayer-only cards out of solo runs.** `CardModel.MultiplayerConstraint` returning `CardMultiplayerConstraint.MultiplayerOnly` is the mechanism — pools filter on `RunState.CardMultiplayerConstraint` when asked for unlocked cards, so the `[Pool]` attribute stays as-is. The Paladin's nine party cards carry it per-card; the Gunslinger's five carry it once on `GunslingerMultiplayerCard`, the Alchemist's five on `AlchemistMultiplayerCard`.
 - [ ] Every multiplayer card still needs a defined single-player behaviour — the gate keeps them out of the solo *offer*, but save continuation or a lobby that empties out can still put one in a solo deck
 
 ---
