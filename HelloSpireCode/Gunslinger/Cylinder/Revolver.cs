@@ -392,6 +392,7 @@ public static class Revolver
                     .FromCard(gun.Card)
                     .WithAttackerAnim(ShivAnim, gun.Card.Owner.Character.AttackAnimDelay)
                     .Targeting(enemy)
+                    .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3")
                     .Execute(ctx);
                 dealt += attack.Results.SelectMany(hit => hit).Sum(result => result.TotalDamage);
             }
@@ -456,7 +457,10 @@ public static class Revolver
         await CreatureCmd.TriggerAnim(gun.Self, ShivAnim,
             gun.Card?.Owner.Character.AttackAnimDelay ?? 0f);
         for (var i = 0; i < hits; i++)
+        {
+            VfxCmd.PlayOnCreature(target, "vfx/vfx_attack_blunt");
             await CreatureCmd.Damage(ctx, target, damage, ValueProp.Unblockable, gun.Self, gun.Card);
+        }
 
         return damage * hits;
     }

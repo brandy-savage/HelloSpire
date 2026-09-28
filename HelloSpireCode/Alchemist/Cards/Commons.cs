@@ -3,9 +3,12 @@ using HelloSpire.HelloSpireCode.Alchemist.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace HelloSpire.HelloSpireCode.Alchemist.Cards;
@@ -30,7 +33,8 @@ public sealed class CopperShot() : AlchemistCard(1, CardType.Attack, CardRarity.
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3").Execute(ctx);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Weak));
     }
 
@@ -49,7 +53,8 @@ public sealed class CinnabarEdge() : AlchemistCard(1, CardType.Attack, CardRarit
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_slash").Execute(ctx);
 
         if ((AlchemistEffects.Peek(Lab)?.CardsExhaustedThisTurn ?? 0) > 0)
             await AlchemistEffects.ApplyVulnerable(ctx, Lab, play.Target, DynamicVars["Vulnerable"].BaseValue);
@@ -68,7 +73,8 @@ public sealed class GlassShard() : AlchemistCard(1, CardType.Attack, CardRarity.
         var target = AlchemistEffects.RandomEnemy(Lab);
         if (target == null) return;
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(target)
+            .WithHitFx("vfx/vfx_rock_shatter").Execute(ctx);
     }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
@@ -83,7 +89,8 @@ public sealed class QuickSilver() : AlchemistCard(0, CardType.Attack, CardRarity
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_starry_impact").Execute(ctx);
 
         if (Belt.IsFull(Lab))
             await AlchemistEffects.Draw(ctx, Lab, 1);
@@ -104,11 +111,13 @@ public sealed class FlaskToss() : AlchemistCard(1, CardType.Skill, CardRarity.Co
     {
         if (!(await Belt.Distill(ctx, Lab)).Distilled) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         for (var i = 0; i < 3; i++)
         {
             var enemy = AlchemistEffects.RandomEnemy(Lab);
             if (enemy == null) break;
 
+            NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(NPoisonImpactVfx.Create(enemy));
             await AlchemistEffects.ApplyPoison(ctx, Lab, enemy, DynamicVars["Poison"].BaseValue);
         }
     }
@@ -127,7 +136,8 @@ public sealed class BrewedEdge() : AlchemistCard(1, CardType.Attack, CardRarity.
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_slash").Execute(ctx);
 
         if ((AlchemistEffects.Peek(Lab)?.BrewedThisTurn ?? 0) > 0)
             await AlchemistEffects.Draw(ctx, Lab, 1);
@@ -148,7 +158,8 @@ public sealed class CrucibleBlow() : AlchemistCard(1, CardType.Attack, CardRarit
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_heavy_blunt").Execute(ctx);
 
         if ((await Belt.Distill(ctx, Lab)).Distilled)
             await AlchemistEffects.GainEnergy(Lab, DynamicVars["Energy"].BaseValue);
@@ -168,7 +179,8 @@ public sealed class CausticFlask() : AlchemistCard(1, CardType.Attack, CardRarit
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitVfxNode(t => NPoisonImpactVfx.Create(t)).Execute(ctx);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Poison));
     }
 
@@ -184,7 +196,8 @@ public sealed class VolatileStrike() : AlchemistCard(1, CardType.Attack, CardRar
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_slash").Execute(ctx);
         await Alchemy.CreateVolatileReagent(ctx, Lab, PileType.Draw);
     }
 
@@ -202,7 +215,8 @@ public sealed class Firebrand() : AlchemistCard(2, CardType.Attack, CardRarity.U
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitVfxNode(t => NFireBurstVfx.Create(t, 1f)).Execute(ctx);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Fire));
     }
 
@@ -226,6 +240,8 @@ public sealed class CoagulatingAgent() : AlchemistCard(1, CardType.Skill, CardRa
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(NPoisonImpactVfx.Create(play.Target));
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
         await AlchemistEffects.ApplyPoison(ctx, Lab, play.Target, DynamicVars["Poison"].BaseValue);
     }
@@ -242,8 +258,12 @@ public sealed class ScatterFlask() : AlchemistCard(1, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         foreach (var enemy in AlchemistEffects.Enemies(Lab))
+        {
+            NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(NPoisonImpactVfx.Create(enemy));
             await AlchemistEffects.ApplyPoison(ctx, Lab, enemy, DynamicVars["Poison"].BaseValue);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars["Poison"].UpgradeValueBy(2m);
@@ -256,8 +276,11 @@ public sealed class EnergyFlask() : AlchemistCard(0, CardType.Skill, CardRarity.
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [Tip(AlchemistTips.Brew)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Energy));
+    }
 
     protected override void OnUpgrade() => RemoveKeyword(CardKeyword.Exhaust);
 }
@@ -292,6 +315,7 @@ public sealed class SalvageReagents() : AlchemistCard(0, CardType.Skill, CardRar
     {
         if (!await Alchemy.ExhaustOneFromDiscard(ctx, Lab)) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
     }
 
@@ -307,8 +331,11 @@ public sealed class BitterSolvent() : AlchemistCard(1, CardType.Skill, CardRarit
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [Tip(AlchemistTips.Infuse), HoverTipFactory.FromPower<PoisonPower>(), HoverTipFactory.FromPower<WeakPower>()];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Infuse(ctx, Lab, poison: DynamicVars["Poison"].BaseValue, weak: DynamicVars["WeakPower"].BaseValue);
+    }
 
     protected override void OnUpgrade() => DynamicVars["Poison"].UpgradeValueBy(1m);
 }
@@ -322,6 +349,7 @@ public sealed class SteadyPour() : AlchemistCard(1, CardType.Skill, CardRarity.C
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Infuse(ctx, Lab, block: DynamicVars.Block.BaseValue);
         await Belt.LeaveResidualReagent(ctx, Lab);
     }
@@ -340,6 +368,8 @@ public sealed class ContaminatedSample() : AlchemistCard(1, CardType.Skill, Card
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(NPoisonImpactVfx.Create(play.Target));
         await Alchemy.CreateVolatileReagent(ctx, Lab, PileType.Draw);
         await AlchemistEffects.ApplyPoison(ctx, Lab, play.Target, DynamicVars["Poison"].BaseValue);
     }
@@ -378,6 +408,7 @@ public sealed class BrewingHabit() : AlchemistCard(1, CardType.Skill, CardRarity
     {
         if (!(await Belt.Distill(ctx, Lab)).Distilled) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.Draw(ctx, Lab, DynamicVars.Cards.IntValue);
     }
 

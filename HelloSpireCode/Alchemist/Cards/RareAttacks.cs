@@ -1,3 +1,4 @@
+using Godot;
 using HelloSpire.HelloSpireCode.Alchemist.Lab;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -6,6 +7,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace HelloSpire.HelloSpireCode.Alchemist.Cards;
@@ -36,7 +38,8 @@ public sealed class MatterAnnihilation() : AlchemistCard(1, CardType.Attack, Car
             }
         }
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_dramatic_stab").Execute(ctx);
     }
 
     protected override void OnUpgrade()
@@ -55,8 +58,10 @@ public sealed class HomunculusAssault() : AlchemistCard(2, CardType.Skill, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         for (var i = 0; i < DynamicVars["Potions"].IntValue; i++)
         {
+            NCombatRoom.Instance?.PlaySplashVfx(Owner.Creature, new Color("fd2155"));
             await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Attack));
             await Alchemy.CreateVolatileResidue(ctx, Lab, PileType.Discard);
         }
@@ -75,10 +80,14 @@ public sealed class GildedExecution() : AlchemistCard(2, CardType.Attack, CardRa
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_heavy_blunt").Execute(ctx);
 
         if (play.Target.CurrentHp <= 0)
+        {
+            VfxCmd.PlayOnCreature(Owner.Creature, "vfx/vfx_coin_explosion_regular");
             await PlayerCmd.GainGold(DynamicVars["Gold"].BaseValue, Owner);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(5m);
@@ -109,7 +118,8 @@ public sealed class GrandCombustion() : AlchemistCard(3, CardType.Attack, CardRa
         var damage = DynamicVars.Damage.BaseValue + DynamicVars["PerPotion"].BaseValue * poured;
 
         foreach (var enemy in AlchemistEffects.Enemies(Lab))
-            await DamageCmd.Attack(damage).FromCard(this).Targeting(enemy).Execute(ctx);
+            await DamageCmd.Attack(damage).FromCard(this).Targeting(enemy)
+                .WithHitFx("vfx/vfx_heavy_blunt").Execute(ctx);
     }
 
     protected override void OnUpgrade()
@@ -131,7 +141,8 @@ public sealed class CatalyticExplosion() : AlchemistCard(2, CardType.Attack, Car
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_heavy_blunt").Execute(ctx);
 
         var types = AlchemistEffects.Peek(Lab)?.UsedThisCombat.Select(p => p.GetType()).Distinct().Count() ?? 0;
         await Belt.Infuse(ctx, Lab, damage: DynamicVars["PerType"].BaseValue * types);

@@ -144,6 +144,7 @@ public sealed class TheGreatWork() : AlchemistCard(3, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.LoseHp(ctx, Lab, DynamicVars["Life"].BaseValue);
         await Belt.Brew(ctx, Lab, ModelDb.Potion<PhilosophersStone>().ToMutable(), volatilePotion: false);
     }

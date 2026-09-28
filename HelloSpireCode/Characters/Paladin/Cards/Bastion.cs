@@ -18,6 +18,7 @@ public sealed class Bastion() : PaladinCard(1, CardType.Skill, CardRarity.Common
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var amount = 6m + Owner.Creature.GetPowerAmount<PlatingPower>();
         await CreatureCmd.GainBlock(Owner.Creature, amount, ValueProp.Move, cardPlay);
     }

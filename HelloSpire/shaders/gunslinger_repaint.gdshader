@@ -1,4 +1,5 @@
-// Gunslinger black-and-tan: repaints the Ironclad atlas at render time.
+// Gunslinger brown/black/red: repaints the Ironclad atlas at render time, chosen to read as
+// distinct from both the vanilla Ironclad and the Alchemist's own repaint.
 shader_type canvas_item;
 
 vec3 rgb2hsv(vec3 c) {
@@ -22,14 +23,14 @@ void fragment() {
     float hd = hsv.x * 360.0;
     bool red = hd < 25.0 || hd > 335.0;
     if (red && hsv.y > 0.45 && hsv.z > 0.55) {
-        // rage glow -> ember orange
-        hsv = vec3(30.0 / 360.0, hsv.y, min(1.0, hsv.z * 1.05));
+        // rage glow -> blood red
+        hsv = vec3(2.0 / 360.0, min(1.0, hsv.y * 1.1), hsv.z);
     } else if ((hd < 22.0 || hd > 330.0) && hsv.y > 0.25) {
-        // maroon cloth -> near-black duster
-        hsv = vec3(25.0 / 360.0, hsv.y * 0.35, hsv.z * 0.38);
+        // maroon cloth -> near-black
+        hsv = vec3(hsv.x, hsv.y * 0.2, hsv.z * 0.28);
     } else if (hd >= 22.0 && hd < 52.0 && hsv.y > 0.28) {
-        // leather -> pale tan
-        hsv = vec3(38.0 / 360.0, hsv.y * 0.55, min(1.0, hsv.z * 1.3));
+        // leather -> saddle brown
+        hsv = vec3(26.0 / 360.0, min(1.0, hsv.y * 1.05), hsv.z * 0.85);
     }
     COLOR = vec4(hsv2rgb(hsv), tex.a);
 }

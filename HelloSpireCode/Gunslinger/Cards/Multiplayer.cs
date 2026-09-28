@@ -114,6 +114,7 @@ public sealed class CoveringPartner() : GunslingerMultiplayerCard(1, CardType.Sk
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await GunslingerEffects.GainBlockAll(Gun, DynamicVars.Block.BaseValue);
 
         await Revolver.Cycle(ctx, Gun);

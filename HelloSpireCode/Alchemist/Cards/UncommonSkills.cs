@@ -26,7 +26,10 @@ public sealed class DistillationColumn() : AlchemistCard(1, CardType.Skill, Card
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
         if ((await Belt.Distill(ctx, Lab)).Distilled)
+        {
+            await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
             await AlchemistEffects.GainEnergy(Lab, DynamicVars["Energy"].BaseValue);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars["Energy"].UpgradeValueBy(1m);
@@ -37,8 +40,11 @@ public sealed class Reconstitute() : AlchemistCard(1, CardType.Skill, CardRarity
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Alchemy.ReturnFromExhaust(ctx, Lab);
+    }
 
     protected override void OnUpgrade() => RemoveKeyword(CardKeyword.Exhaust);
 }
@@ -54,6 +60,7 @@ public sealed class SpareFlask() : AlchemistCard(1, CardType.Skill, CardRarity.U
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
         await Belt.BrewRandomDraw(ctx, Lab);
         await Alchemy.CreateVolatileResidue(ctx, Lab, PileType.Discard);
@@ -74,8 +81,11 @@ public sealed class ExtraVial() : AlchemistCard(1, CardType.Skill, CardRarity.Un
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [Tip(AlchemistTips.ThePotionBelt)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.GrantSlotsThisTurn(ctx, Lab, DynamicVars["Slots"].IntValue);
+    }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
@@ -85,6 +95,8 @@ public sealed class PressureBurst() : AlchemistCard(2, CardType.Skill, CardRarit
 {
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
         var held = LabBridge.Current.Held(Owner);
         if (held.Count == 0) return;
 
@@ -116,7 +128,10 @@ public sealed class CatalyticWash() : AlchemistCard(1, CardType.Skill, CardRarit
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
         if ((await Belt.Distill(ctx, Lab)).Distilled)
+        {
+            await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
             await Belt.Infuse(ctx, Lab, damage: DynamicVars["Bonus"].BaseValue);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars["Bonus"].UpgradeValueBy(2m);
@@ -136,6 +151,7 @@ public sealed class TinctureTrade() : AlchemistCard(1, CardType.Skill, CardRarit
     {
         if (!(await Belt.Distill(ctx, Lab)).Distilled) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
         await AlchemistEffects.GainEnergy(Lab, DynamicVars["Energy"].BaseValue);
     }
@@ -156,6 +172,7 @@ public sealed class ReactiveLaboratory() : AlchemistCard(1, CardType.Skill, Card
     {
         if (!(await Belt.Distill(ctx, Lab)).Distilled) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await AlchemistEffects.GainStrength(ctx, Lab, DynamicVars.Strength.BaseValue);
         await AlchemistEffects.GainDexterity(ctx, Lab, DynamicVars.Dexterity.BaseValue);
     }
@@ -174,6 +191,7 @@ public sealed class Liquidate() : AlchemistCard(1, CardType.Skill, CardRarity.Un
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         for (var i = 0; i < DynamicVars.Cards.IntValue; i++)
             await Alchemy.CreateVolatileReagent(ctx, Lab, PileType.Hand);
     }
@@ -194,6 +212,7 @@ public sealed class SmeltTheWeak() : AlchemistCard(0, CardType.Skill, CardRarity
     {
         if (!await Alchemy.ExhaustJunk(ctx, Lab)) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainEnergy(Lab, 1m);
         await Belt.Infuse(ctx, Lab, damage: DynamicVars["Infuse"].BaseValue);
     }
@@ -208,6 +227,7 @@ public sealed class FalseBottom() : AlchemistCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         for (var i = 0; i < DynamicVars["Reagents"].IntValue; i++)
             await Alchemy.CreateVolatileReagent(ctx, Lab, PileType.Draw);
 
@@ -226,6 +246,7 @@ public sealed class BrewUnderPressure() : AlchemistCard(1, CardType.Skill, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
 
         if (Belt.Held(Lab).Count == 0)
@@ -248,7 +269,10 @@ public sealed class ToxicDistillate() : AlchemistCard(1, CardType.Skill, CardRar
         ArgumentNullException.ThrowIfNull(play.Target);
 
         if ((await Belt.Distill(ctx, Lab)).Distilled)
+        {
+            VfxCmd.PlayOnCreature(play.Target, "vfx/vfx_attack_slash");
             await AlchemistEffects.ApplyPoison(ctx, Lab, play.Target, DynamicVars["Poison"].BaseValue);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars["Poison"].UpgradeValueBy(2m);
@@ -263,6 +287,7 @@ public sealed class ReactiveMixture() : AlchemistCard(2, CardType.Skill, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Poison));
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Weak));
     }
@@ -281,6 +306,7 @@ public sealed class ReagentRecovery() : AlchemistCard(1, CardType.Skill, CardRar
     {
         if (!await Alchemy.ExhaustJunkFromDiscard(ctx, Lab)) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.Draw(ctx, Lab, 2);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
     }
@@ -298,6 +324,7 @@ public sealed class PotentDistillation() : AlchemistCard(1, CardType.Skill, Card
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await AlchemistEffects.GainPotency(ctx, Lab, DynamicVars["PotencyPower"].BaseValue);
         await Belt.Distill(ctx, Lab);
     }
@@ -311,6 +338,7 @@ public sealed class SolventFlask() : AlchemistCard(1, CardType.Skill, CardRarity
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
         if (!await Alchemy.ExhaustJunk(ctx, Lab)) return;
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.Draw(ctx, Lab, 2);
     }
 
@@ -327,6 +355,7 @@ public sealed class GlassApron() : AlchemistCard(2, CardType.Skill, CardRarity.U
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var block = DynamicVars.Block.BaseValue;
         if (Belt.IsFull(Lab)) block += DynamicVars["Bonus"].BaseValue;
 
@@ -348,6 +377,7 @@ public sealed class TaintedWard() : AlchemistCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainBlock(Lab, DynamicVars.Block.BaseValue);
         await Belt.Infuse(ctx, Lab, vulnerable: DynamicVars["Vulnerable"].BaseValue);
         await Belt.LeaveResidualReagent(ctx, Lab);
@@ -363,8 +393,11 @@ public sealed class VenomousAmpoule() : AlchemistCard(1, CardType.Skill, CardRar
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [Tip(AlchemistTips.Brew)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.PoisonAmpoule));
+    }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }

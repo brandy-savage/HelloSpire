@@ -7,10 +7,11 @@ using MegaCrit.Sts2.Core.Nodes.Combat;
 namespace HelloSpire.HelloSpireCode.Characters;
 
 /// <summary>
-/// All three HelloSpire characters wear the Ironclad's spine rig, each repainted at render time
+/// All three HelloSpire characters wear a borrowed spine rig, each repainted at render time
 /// by its own palette-remap shader through spine-godot's material slot (set_normal_material):
-/// Paladin gold-and-white, Gunslinger black-and-tan with ember glow, Alchemist greens with a
-/// toxic glow. Resource surgery is off the table (SpineAtlasResource rebuilds and drops
+/// Paladin grey/baby-blue/gold, Gunslinger brown/black/red, Alchemist cyan/seafoam/magenta —
+/// three palettes chosen to be distinct both from the vanilla characters they're built on and
+/// from each other. Resource surgery is off the table (SpineAtlasResource rebuilds and drops
 /// injected textures); a material is instance-only and degrades to plain Ironclad if missing.
 /// </summary>
 [HarmonyPatch(typeof(Creature), nameof(Creature.CreateVisuals))]

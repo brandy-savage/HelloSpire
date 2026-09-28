@@ -26,6 +26,7 @@ public sealed class Bandolier() : GunslingerCard(1, CardType.Skill, CardRarity.U
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Lead, DynamicVars["Lead"].IntValue);
         await Revolver.Load(ctx, Gun, Rounds.Crippling);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
@@ -53,6 +54,7 @@ public sealed class Speedloader() : GunslingerCard(2, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.FillEmpty(ctx, Gun, Rounds.Lead);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -78,6 +80,7 @@ public sealed class CustomLoad() : GunslingerCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, PickAmmunition(), DynamicVars["Special"].IntValue);
         await Revolver.Load(ctx, Gun, Rounds.Lead);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
@@ -106,6 +109,7 @@ public sealed class PiercingCartridge() : GunslingerCard(1, CardType.Skill, Card
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Piercing, DynamicVars["Load"].IntValue);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -125,6 +129,7 @@ public sealed class GuardCartridge() : GunslingerCard(1, CardType.Skill, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Guard, DynamicVars["Load"].IntValue);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -144,6 +149,7 @@ public sealed class SmokeCartridge() : GunslingerCard(1, CardType.Skill, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Smoke);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -161,6 +167,7 @@ public sealed class ReCock() : GunslingerCard(0, CardType.Skill, CardRarity.Unco
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await Revolver.Cycle(ctx, Gun);
         await GunslingerEffects.GainDeadeye(ctx, Gun, DynamicVars["DeadeyePower"].BaseValue);
     }
@@ -184,6 +191,8 @@ public sealed class CheckTheCylinder() : GunslingerCard(0, CardType.Skill, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
         var cylinder = await Revolver.Get(ctx, Gun);
         if (cylinder == null) return;
 
@@ -213,6 +222,7 @@ public sealed class StackedChamber() : GunslingerCard(1, CardType.Skill, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await PowerCmd.Apply<StackedChamberPower>(ctx, Owner.Creature, 1m, Owner.Creature, this);
         await GunslingerEffects.GainDeadeye(ctx, Gun, DynamicVars["DeadeyePower"].BaseValue);
     }
@@ -228,8 +238,11 @@ public sealed class UnderTheDuster() : GunslingerCard(1, CardType.Skill, CardRar
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromPower<ArmorPower>(), Tip(GunslingerTips.Gadget)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
+    }
 
     protected override void OnUpgrade() => DynamicVars["ArmorPower"].UpgradeValueBy(1m);
 }
@@ -252,6 +265,7 @@ public sealed class HunkerDown() : GunslingerCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
 
         if (Revolver.Peek(Gun) is not { FiredThisTurn: true })
@@ -295,6 +309,7 @@ public sealed class DuckAndWeave() : GunslingerCard(2, CardType.Skill, CardRarit
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
 
         var armor = Owner.Creature.GetPowerAmount<ArmorPower>();
@@ -333,6 +348,7 @@ public sealed class DiveForCover() : GunslingerCard(1, CardType.Skill, CardRarit
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var incoming = GunslingerEffects.IncomingAttackDamage(Gun);
         if (incoming <= 0)
         {
@@ -372,6 +388,7 @@ public sealed class GritTeeth() : GunslingerCard(1, CardType.Skill, CardRarity.U
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        VfxCmd.PlayOnCreature(Owner.Creature, "vfx/vfx_bloody_impact");
         await GunslingerEffects.LoseHp(ctx, Gun, DynamicVars["SelfDamage"].BaseValue);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
@@ -395,6 +412,7 @@ public sealed class DeadMansBluff() : GunslingerCard(1, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Spin(ctx, Gun);
 
         if (Revolver.Peek(Gun) is { UnderHammer: null })
@@ -459,6 +477,7 @@ public sealed class ColdRead() : GunslingerCard(1, CardType.Skill, CardRarity.Un
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
+        VfxCmd.PlayOnCreature(play.Target, "vfx/vfx_gaze");
         await GunslingerEffects.ApplyWeak(ctx, Gun, play.Target, DynamicVars["WeakPower"].BaseValue);
         await GunslingerEffects.ApplyDebilitate(ctx, Gun, play.Target, DynamicVars["DebilitatePower"].BaseValue);
     }

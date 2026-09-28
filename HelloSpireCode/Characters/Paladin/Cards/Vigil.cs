@@ -21,6 +21,7 @@ public sealed class Vigil() : PaladinCard(0, CardType.Skill, CardRarity.Uncommon
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature,
             DynamicVars["Plating"].BaseValue, Owner.Creature, this);

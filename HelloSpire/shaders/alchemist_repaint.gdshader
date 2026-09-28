@@ -1,6 +1,8 @@
-// Alchemist browns: repaints the SILENT's spine atlas at render time.
-// Sage/dark-green cloak and hood -> brown leathers; chartreuse slash vfx -> amber;
-// teal daggers and tan bandage wraps are left alone.
+// Alchemist cyan/seafoam/magenta: repaints the SILENT's spine atlas at render time, chosen
+// to read as an unnatural chemical palette distinct from both the vanilla Silent and the
+// Gunslinger's own brown/black/red repaint.
+// Yellow-sage cloak -> cyan, dark-green hood/shadow -> seafoam green, chartreuse slash vfx
+// -> magenta; teal daggers and tan bandage wraps are left alone.
 shader_type canvas_item;
 
 uniform sampler2D weapon_page : filter_linear;
@@ -34,11 +36,14 @@ void fragment() {
     vec3 hsv = rgb2hsv(tex.rgb);
     float hd = hsv.x * 360.0;
     if (hd >= 55.0 && hd < 85.0 && hsv.y > 0.55 && hsv.z > 0.55) {
-        // chartreuse slash vfx -> amber
-        hsv = vec3(40.0 / 360.0, hsv.y, min(1.0, hsv.z * 1.05));
-    } else if (hd >= 80.0 && hd < 175.0 && hsv.y > 0.18) {
-        // sage and dark green cloth -> brown leather
-        hsv = vec3(28.0 / 360.0, min(1.0, hsv.y * 0.85), hsv.z);
+        // chartreuse slash vfx -> magenta
+        hsv = vec3(310.0 / 360.0, hsv.y, min(1.0, hsv.z * 1.05));
+    } else if (hd >= 80.0 && hd < 120.0 && hsv.y > 0.18) {
+        // sage cloth (yellower green) -> cyan
+        hsv = vec3(185.0 / 360.0, min(1.0, hsv.y * 1.1), hsv.z);
+    } else if (hd >= 120.0 && hd < 175.0 && hsv.y > 0.18) {
+        // dark green cloth/hood (bluer green) -> seafoam
+        hsv = vec3(155.0 / 360.0, min(1.0, hsv.y * 0.9), min(1.0, hsv.z * 1.15));
     }
     COLOR = vec4(hsv2rgb(hsv), tex.a);
 }

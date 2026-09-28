@@ -16,6 +16,7 @@ public sealed class Unburden() : PaladinCard(1, CardType.Skill, CardRarity.Uncom
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PaladinEffects.DiscardChosen(choiceContext, Owner, 2, this);
     }

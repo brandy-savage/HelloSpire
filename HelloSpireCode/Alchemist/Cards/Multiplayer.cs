@@ -137,6 +137,7 @@ public sealed class SympatheticDetonation() : AlchemistMultiplayerCard(1, CardTy
 
         await DamageCmd.Attack(damage).FromCard(this)
             .TargetingAllOpponents(CombatState)
+            .WithHitFx("vfx/vfx_heavy_blunt")
             .Execute(ctx);
     }
 

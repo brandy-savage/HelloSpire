@@ -1,6 +1,8 @@
-// Repaints the Ironclad's spine atlas into Paladin gold-and-white at render time.
-// Same palette rules as the offline repaint: bright red (rage glow) -> holy gold,
-// maroon cloth -> cream tabard, leather/bronze -> pale gold, everything else untouched.
+// Repaints the Ironclad's spine atlas into the Paladin's grey/baby-blue/gold palette at
+// render time, chosen to read as distinct from the vanilla Ironclad's red-and-leather at a
+// glance: leather/bronze (the bulk of the armor) -> holy gold, maroon cloth -> steel grey,
+// bright red (rage glow -- a small, rare highlight) -> baby-blue glow, everything else
+// untouched. Gold stays the dominant read since it's the majority-pixel bucket.
 shader_type canvas_item;
 
 uniform sampler2D weapon_page : filter_linear;
@@ -39,14 +41,14 @@ void fragment() {
     float hd = hsv.x * 360.0;
     bool red = hd < 25.0 || hd > 335.0;
     if (red && hsv.y > 0.45 && hsv.z > 0.55) {
-        // rage glow -> holy gold
-        hsv = vec3(46.0 / 360.0, hsv.y, min(1.0, hsv.z * 1.1));
+        // rage glow (small, rare highlight) -> baby-blue holy glow
+        hsv = vec3(200.0 / 360.0, hsv.y * 0.7, min(1.0, hsv.z * 1.15));
     } else if ((hd < 22.0 || hd > 330.0) && hsv.y > 0.25) {
-        // maroon cloth -> cream
-        hsv = vec3(42.0 / 360.0, hsv.y * 0.14, min(1.0, hsv.z * 1.9));
+        // maroon cloth -> steel grey
+        hsv = vec3(220.0 / 360.0, hsv.y * 0.08, min(1.0, hsv.z * 1.3));
     } else if (hd >= 22.0 && hd < 52.0 && hsv.y > 0.28) {
-        // leather -> pale gold
-        hsv = vec3(45.0 / 360.0, min(1.0, hsv.y * 0.85), min(1.0, hsv.z * 1.25));
+        // leather/bronze (the bulk of the armor) -> holy gold
+        hsv = vec3(46.0 / 360.0, min(1.0, hsv.y * 0.85), min(1.0, hsv.z * 1.25));
     }
     COLOR = vec4(hsv2rgb(hsv), tex.a);
 }

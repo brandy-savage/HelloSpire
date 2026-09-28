@@ -51,8 +51,11 @@ public sealed class StackTheCylinder() : GunslingerCard(1, CardType.Skill, CardR
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [Tip(GunslingerTips.TheCylinder)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.StackForBurst(ctx, Gun);
+    }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
@@ -75,6 +78,7 @@ public sealed class PerfectReload() : GunslingerCard(2, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.FillEmpty(ctx, Gun, PickAmmunition());
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -113,8 +117,11 @@ public sealed class GhostStep() : GunslingerCard(1, CardType.Skill, CardRarity.R
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<IntangiblePower>()];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainIntangible(ctx, Gun, DynamicVars["IntangiblePower"].BaseValue);
+    }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
@@ -128,8 +135,11 @@ public sealed class ArmoredLongcoat() : GunslingerCard(2, CardType.Power, CardRa
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<ArmorPower>()];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
+    }
 
     protected override void OnUpgrade() => DynamicVars["ArmorPower"].UpgradeValueBy(2m);
 }
@@ -155,6 +165,7 @@ public sealed class NeverStill() : GunslingerCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
 
         var power = await PowerCmd.Apply<NeverStillPower>(ctx, Owner.Creature, DynamicVars.Energy.BaseValue, Owner.Creature, this);
@@ -174,8 +185,11 @@ public sealed class DeadeyeFocus() : GunslingerCard(1, CardType.Skill, CardRarit
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<DeadeyePower>()];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainDeadeye(ctx, Gun, DynamicVars["DeadeyePower"].BaseValue);
+    }
 
     protected override void OnUpgrade() => DynamicVars["DeadeyePower"].UpgradeValueBy(4m);
 }
@@ -193,6 +207,7 @@ public sealed class SixthSense() : GunslingerCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (await Revolver.MoveBestLoadedUnderHammer(ctx, Gun))
         {
             await GunslingerEffects.Draw(ctx, Gun, DynamicVars.Cards.IntValue);
@@ -222,6 +237,7 @@ public sealed class LuckyShot() : GunslingerCard(0, CardType.Skill, CardRarity.R
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         // Rolled once per Round, so an upgraded copy is two different surprises rather than a pair.
         for (var i = 0; i < DynamicVars["Wild"].IntValue; i++)
             await Revolver.Load(ctx, Gun, Rounds.RandomOrdinary(Gun), 1);
@@ -240,8 +256,11 @@ public sealed class RendingCartridge() : GunslingerCard(1, CardType.Skill, CardR
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [Tip(GunslingerTips.Load), HoverTipFactory.FromPower<DebilitatePower>()];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Rending, DynamicVars["Load"].IntValue);
+    }
 
     protected override void OnUpgrade() => DynamicVars["Load"].UpgradeValueBy(1m);
 }

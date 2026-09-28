@@ -20,8 +20,11 @@ public sealed class AegisOfLight() : PaladinCard(2, CardType.Skill, CardRarity.R
 
     public override bool HasTithe => true;
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay) =>
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+    }
 
     protected override async Task OnTithe(PlayerChoiceContext ctx) =>
         await PowerCmd.Apply<PlatingPower>(ctx, Owner.Creature, 2m, Owner.Creature, this);

@@ -175,7 +175,8 @@ public sealed class ShoulderShot() : GunslingerCard(1, CardType.Attack, CardRari
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3").Execute(ctx);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
 
@@ -205,7 +206,8 @@ public sealed class GutShot() : GunslingerCard(1, CardType.Attack, CardRarity.Co
         var damage = DynamicVars.Damage.BaseValue;
         if (play.Target.HasPower<WeakPower>()) damage += DynamicVars["Bonus"].BaseValue;
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3").Execute(ctx);
     }
 
     protected override void OnUpgrade()
@@ -230,7 +232,8 @@ public sealed class WarningShot() : GunslingerCard(0, CardType.Attack, CardRarit
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_attack_blunt", null, "blunt_attack.mp3").Execute(ctx);
         await GunslingerEffects.ApplyWeak(ctx, Gun, play.Target, DynamicVars["WeakPower"].BaseValue);
     }
 
@@ -252,7 +255,8 @@ public sealed class PointBlank() : GunslingerCard(1, CardType.Attack, CardRarity
         var damage = DynamicVars.Damage.BaseValue;
         if (Revolver.Peek(Gun) is { IsFull: true }) damage += DynamicVars["Bonus"].BaseValue;
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_heavy_blunt", null, "blunt_attack.mp3").Execute(ctx);
     }
 
     protected override void OnUpgrade()
@@ -313,6 +317,7 @@ public sealed class QuickLoad() : GunslingerCard(0, CardType.Skill, CardRarity.C
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.LoadBetween(ctx, Gun, Revolver.LastLoaded(Gun),
             DynamicVars["LoadMin"].IntValue, DynamicVars["LoadMax"].IntValue);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
@@ -336,6 +341,7 @@ public sealed class HeavyCartridge() : GunslingerCard(1, CardType.Skill, CardRar
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Heavy);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -355,6 +361,7 @@ public sealed class CripplingCartridge() : GunslingerCard(1, CardType.Skill, Car
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Crippling);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
     }
@@ -381,6 +388,7 @@ public sealed class TakeCover() : GunslingerCard(1, CardType.Skill, CardRarity.C
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
 
         // Peek is null before the first Gunslinger effect of the combat, which is also "nothing
@@ -415,6 +423,7 @@ public sealed class DusterUp() : GunslingerCard(1, CardType.Skill, CardRarity.Co
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
         await Revolver.Load(ctx, Gun, Rounds.Guard);
@@ -442,6 +451,7 @@ public sealed class RollAside() : GunslingerCard(1, CardType.Skill, CardRarity.C
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
         await Revolver.Cycle(ctx, Gun);
 
@@ -468,6 +478,7 @@ public sealed class SteadyHand() : GunslingerCard(1, CardType.Skill, CardRarity.
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await GunslingerEffects.GainDeadeye(ctx, Gun, DynamicVars["DeadeyePower"].BaseValue);
     }
 
@@ -485,6 +496,7 @@ public sealed class SpinCylinder() : GunslingerCard(0, CardType.Skill, CardRarit
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Spin(ctx, Gun);
         await GunslingerEffects.GainDeadeye(ctx, Gun, DynamicVars["Deadeye"].BaseValue);
         await GunslingerEffects.Draw(ctx, Gun, DynamicVars.Cards.IntValue);
@@ -513,6 +525,7 @@ public sealed class ThumbTheGate() : GunslingerCard(0, CardType.Skill, CardRarit
         // No discard, no Rounds: the card is a trade, not a free reload with a rider.
         if (!await GunslingerEffects.DiscardChosen(ctx, Gun)) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Revolver.Load(ctx, Gun, Rounds.Lead, DynamicVars["Load"].IntValue);
     }
 
@@ -537,6 +550,7 @@ public sealed class TakeStock() : GunslingerCard(1, CardType.Skill, CardRarity.C
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await GunslingerEffects.Draw(ctx, Gun, DynamicVars.Cards.IntValue);
 
         if (Revolver.Peek(Gun) is { UnderHammer: null }) await Revolver.Cycle(ctx, Gun);
@@ -562,6 +576,7 @@ public sealed class PocketSand() : GunslingerCard(1, CardType.Skill, CardRarity.
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
         ArgumentNullException.ThrowIfNull(play.Target);
+        VfxCmd.PlayOnCreature(play.Target, "vfx/vfx_sandy_impact");
         await GunslingerEffects.ApplyWeak(ctx, Gun, play.Target, DynamicVars["WeakPower"].BaseValue);
     }
 

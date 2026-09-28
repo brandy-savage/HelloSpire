@@ -97,7 +97,8 @@ public sealed class BearTrap() : GunslingerCard(1, CardType.Attack, CardRarity.C
         var damage = DynamicVars.Damage.BaseValue;
         if (Owner.Creature.GetPowerAmount<ArmorPower>() > 0m) damage += DynamicVars["Bonus"].BaseValue;
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target).Execute(ctx);
+        await DamageCmd.Attack(damage).FromCard(this).Targeting(play.Target)
+            .WithHitFx("vfx/vfx_bite").Execute(ctx);
         await GunslingerEffects.ApplyWeak(ctx, Gun, play.Target, DynamicVars["WeakPower"].BaseValue);
     }
 
@@ -131,6 +132,7 @@ public sealed class Tripwire() : GunslingerCard(0, CardType.Skill, CardRarity.Co
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
+        VfxCmd.PlayOnCreature(play.Target, "vfx/vfx_scratch");
         await GunslingerEffects.ApplyWeak(ctx, Gun, play.Target, DynamicVars["WeakPower"].BaseValue);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
     }
@@ -186,6 +188,7 @@ public sealed class FieldKit() : GunslingerCard(1, CardType.Skill, CardRarity.Un
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await GunslingerEffects.GainArmor(ctx, Gun, DynamicVars["ArmorPower"].BaseValue);
         await GunslingerEffects.Draw(ctx, Gun, DynamicVars.Cards.IntValue);
     }
@@ -213,7 +216,8 @@ public sealed class ScattergunShell() : GunslingerCard(2, CardType.Attack, CardR
     {
         foreach (var enemy in GunslingerEffects.Enemies(Gun))
         {
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(enemy).Execute(ctx);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(enemy)
+                .WithHitFx("vfx/vfx_heavy_blunt", null, "blunt_attack.mp3").Execute(ctx);
         }
 
         // Applied in a second pass: anything that died to the damage above is no longer hittable,

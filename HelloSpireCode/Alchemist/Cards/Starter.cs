@@ -41,8 +41,11 @@ public sealed class DefendAlchemist() : AlchemistCard(1, CardType.Skill, CardRar
 
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Defend];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, play);
+    }
 
     protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(3m);
 }
@@ -77,6 +80,7 @@ public sealed class Infusion() : AlchemistCard(1, CardType.Skill, CardRarity.Bas
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Infuse(ctx, Lab, damage: DynamicVars["Bonus"].BaseValue);
     }
 

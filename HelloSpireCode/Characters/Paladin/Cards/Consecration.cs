@@ -13,9 +13,12 @@ public sealed class Consecration() : PaladinCard(1, CardType.Power, CardRarity.U
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(3m, ValueProp.Unpowered)];
 
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay) =>
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await PowerCmd.Apply<ConsecrationPower>(choiceContext, Owner.Creature,
             DynamicVars.Damage.BaseValue, Owner.Creature, this);
+    }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m);
 }

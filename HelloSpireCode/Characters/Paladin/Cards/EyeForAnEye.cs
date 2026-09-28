@@ -20,6 +20,7 @@ public sealed class EyeForAnEye() : PaladinCard(1, CardType.Skill, CardRarity.Un
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         await PowerCmd.Apply<EyeForAnEyePower>(choiceContext, Owner.Creature,
             DynamicVars["Thorns"].BaseValue, Owner.Creature, this);

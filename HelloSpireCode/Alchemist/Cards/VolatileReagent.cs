@@ -1,6 +1,7 @@
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models.CardPools;
@@ -18,8 +19,11 @@ public sealed class VolatileReagent() : AlchemistCard(0, CardType.Skill, CardRar
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, CardKeyword.Ethereal];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        VfxCmd.PlayOnCreature(Owner.Creature, "vfx/vfx_starry_impact");
         await AlchemistEffects.GainEnergy(Lab, 1m);
+    }
 
     /// <summary>
     /// Upgrade: drop Ethereal, so a Reagent that arrives on a turn you cannot spend it survives

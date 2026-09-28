@@ -4,11 +4,14 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Potions;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace HelloSpire.HelloSpireCode.Alchemist.Cards;
@@ -25,6 +28,7 @@ public sealed class PhilosophersFlame() : AlchemistCard(1, CardType.Skill, CardR
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await Belt.Infuse(ctx, Lab, damage: DynamicVars.Damage.BaseValue);
         await Belt.LeaveResidualReagent(ctx, Lab);
     }
@@ -41,6 +45,8 @@ public sealed class Stabilize() : AlchemistCard(1, CardType.Skill, CardRarity.Ra
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
         var bench = await AlchemistEffects.Bench(ctx, Lab);
         if (bench == null || bench.Volatile.Count == 0) return;
 
@@ -98,9 +104,12 @@ public sealed class HeavyTransmute() : AlchemistCard(1, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
         var burned = await Alchemy.ExhaustAllOther(ctx, Lab);
         if (burned.Count == 0) return;
 
+        VfxCmd.PlayOnCreature(Owner.Creature, "vfx/vfx_coin_explosion_regular");
         await PlayerCmd.GainGold(DynamicVars["Gold"].BaseValue * burned.Count, Owner);
     }
 
@@ -146,6 +155,7 @@ public sealed class EssenceDistillation() : AlchemistCard(1, CardType.Skill, Car
     {
         if (!(await Belt.Distill(ctx, Lab)).Distilled) return;
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await AlchemistEffects.GainPotency(ctx, Lab, DynamicVars["PotencyPower"].BaseValue);
         await AlchemistEffects.GainEnergy(Lab, DynamicVars["Energy"].BaseValue);
     }
@@ -183,6 +193,8 @@ public sealed class PerfectSolvent() : AlchemistCard(1, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+
         var burned = (await Alchemy.ExhaustAllJunk(ctx, Lab)).Count;
         if (burned == 0) return;
 
@@ -202,8 +214,11 @@ public sealed class WidenTheBelt() : AlchemistCard(2, CardType.Power, CardRarity
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [Tip(AlchemistTips.ThePotionBelt)];
 
-    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play) =>
+    protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
+    {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "PowerUp", Owner.Character.PowerUpAnimDelay);
         await Belt.GrantTemporarySlots(ctx, Lab, DynamicVars["Slots"].IntValue);
+    }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
@@ -223,6 +238,8 @@ public sealed class Overdose() : AlchemistCard(2, CardType.Skill, CardRarity.Rar
     {
         ArgumentNullException.ThrowIfNull(play.Target);
 
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
+        NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(NPoisonImpactVfx.Create(play.Target));
         await AlchemistEffects.ApplyPoison(ctx, Lab, play.Target, DynamicVars["Poison"].BaseValue);
         await Belt.Infuse(ctx, Lab, poison: DynamicVars["Bonus"].BaseValue);
         await Belt.Brew(ctx, Lab, LabBridge.Current.NamedPotion(BasePotion.Poison));
@@ -251,6 +268,7 @@ public sealed class ChainReaction() : AlchemistCard(-2, CardType.Skill, CardRari
 
     protected override async Task OnPlay(PlayerChoiceContext ctx, CardPlay play)
     {
+        await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var brews = EnergyCost.CapturedXValue + DynamicVars["Bonus"].IntValue;
         for (var i = 0; i < brews; i++)
             await Belt.BrewRandom(ctx, Lab);
