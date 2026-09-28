@@ -197,8 +197,9 @@ On top of that, `Characters/CharacterSkeletons.cs` swaps in a mod-local rig for 
 a `spine/<character>/` folder — plain `.atlas`/`.skel`/page `.png`, no `.spskel` wrapper or pck
 import needed. All three characters ship one: the Paladin on the Ironclad rig, the Gunslinger on
 the Silent, the Alchemist on the Necrobinder, each with its palette baked into the pages and its
-stance set by skeleton edits. `Characters/CharacterSkins.cs` repaints only the rest-site, shop and
-energy-counter art (still borrowed from the Ironclad) through a per-character shader.
+stance set by skeleton edits. The shop swaps to the same rig (`Characters/RoomSkins.cs`).
+`Characters/CharacterSkins.cs` repaints only the rest-site and energy-counter art (still borrowed
+from the Ironclad) through a per-character shader, which is also the shop's fallback.
 
 **Every one of those files is generated.** The rigs, the shaders and the `SOURCE.json` beside each
 rig all come out of the character workbench, [sts2-reskin-pipeline](https://github.com/r0zar/sts2-reskin-pipeline),

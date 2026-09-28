@@ -170,7 +170,7 @@
   "HELLOSPIRE-RENDING_CARTRIDGE.title": "Rending Cartridge",
   "HELLOSPIRE-RENDING_CARTRIDGE.description": "[gold]Load[/gold] {Load:diff()} [gold]Rending Rounds[/gold].",
   "HELLOSPIRE-QUICKDRAW_LEGEND.title": "Quickdraw Legend",
-  "HELLOSPIRE-QUICKDRAW_LEGEND.description": "The first card you play each turn that [gold]Fires[/gold] refunds {QuickdrawLegendPower:energyIcons()}.",
+  "HELLOSPIRE-QUICKDRAW_LEGEND.description": "The first card you play each turn that [gold]Fires[/gold] refunds {QuickdrawLegendPower:diff()} [gold]Energy[/gold].",
   "HELLOSPIRE-BOTTOMLESS_BANDOLIER.title": "Bottomless Bandolier",
   "HELLOSPIRE-BOTTOMLESS_BANDOLIER.description": "At the start of your turn, if there is an empty chamber, [gold]Load[/gold] 1 random specialist Round.",
   "HELLOSPIRE-BOTTOMLESS_BANDOLIER.upgrade.description": "At the start of your turn, if there is an empty chamber, [gold]Load[/gold] 1 random specialist Round, then gain {Deadeye} [gold]Deadeye[/gold].",

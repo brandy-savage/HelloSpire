@@ -22,8 +22,8 @@ namespace HelloSpire.HelloSpireCode.Characters;
 /// no .spskel/.spatlas wrappers or pck import required.
 ///
 /// Missing folder or failed load degrades silently to the CharacterSkins shader repaint,
-/// same spirit as that patch's own fallback. Rest-site/shop scenes still use the shader
-/// repaint for now (they instantiate separate spine scenes; see RoomSkins).
+/// same spirit as that patch's own fallback. The shop swaps to the same rig (see RoomSkins);
+/// the rest site still uses the shader repaint for now.
 /// </summary>
 [HarmonyPatch(typeof(Creature), nameof(Creature.CreateVisuals))]
 internal static class CharacterSkeletons

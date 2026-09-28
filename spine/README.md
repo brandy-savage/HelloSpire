@@ -10,7 +10,7 @@ The workbench is the **only** source of truth for what a character looks like:
 | What | Where it is defined |
 |---|---|
 | donor rig (movement set) | `config/paths.toml` |
-| colours — combat pages *and* the rest-site/shop shader | `config/palettes.toml` |
+| colours — combat pages *and* the rest-site shader (the shop uses the combat rig; the shader is only its fallback) | `config/palettes.toml` |
 | stance, posture, proportions, hidden parts | `skeletons/<character>/edits.json` |
 | replacement part art | `art_in/<character>/` |
 
