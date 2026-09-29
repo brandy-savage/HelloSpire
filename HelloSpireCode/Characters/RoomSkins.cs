@@ -13,19 +13,49 @@ namespace HelloSpire.HelloSpireCode.Characters;
 /// The combat repaint, everywhere else the character body shows up. Rest sites and the shop
 /// instantiate the character's spine scenes directly (RestSiteAnimPath / MerchantAnimPath, both
 /// inherited from the Ironclad), so without this the unpainted Ironclad sits at the campfire
-/// and browses the shop. The rest site gets the CharacterSkins materials on every SpineSprite in
-/// the instantiated scene; the shop swaps in the character's own rig first (see Merchant).
+/// and browses the shop. Both now swap in the character's own rig first (combat rig in the shop,
+/// the recoloured rest-site rig at the campfire) and keep the CharacterSkins material as fallback.
 /// </summary>
 internal static class RoomSkins
 {
+    /// <summary>
+    /// The rest-site scene is the placeholder's, but its body is a dedicated rest-site skeleton
+    /// (restsite_&lt;donor&gt;, with the act loops overgrowth/hive/glory). A character that ships
+    /// spine/&lt;name&gt;/restsite/ — the same skeleton, recoloured by the workbench — gets it
+    /// swapped onto every SpineSprite here, before _Ready picks the act loop. Otherwise the
+    /// shader repaint of the inherited art stays as the fallback.
+    /// </summary>
     [HarmonyPatch(typeof(NRestSiteCharacter), nameof(NRestSiteCharacter.Create))]
     private static class RestSite
     {
         [HarmonyPostfix]
         private static void Reskin(Player player, NRestSiteCharacter __result)
         {
+            if (__result == null) return;
+            if (CharacterSkeletons.SkeletonFor(player.Character, "restsite") is { } rig && SwapRig(__result, rig))
+                return;
             if (CharacterSkins.MaterialFor(player.Character) is { } material)
                 CharacterSkins.ApplyToSpines(__result, material);
+        }
+
+        private static bool SwapRig(Godot.Node root, MegaSkeletonDataResource rig)
+        {
+            try
+            {
+                var swapped = 0;
+                foreach (var child in root.GetChildren())
+                {
+                    if (child.GetClass() != "SpineSprite") continue;
+                    new MegaSprite((Node2D)child).SetSkeletonDataRes(rig);
+                    swapped++;
+                }
+                return swapped > 0;
+            }
+            catch (System.Exception e)
+            {
+                GD.PushWarning($"[HelloSpire] rest-site rig swap failed, falling back to the shader repaint: {e.Message}");
+                return false;
+            }
         }
     }
 

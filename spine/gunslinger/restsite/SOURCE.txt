@@ -3,12 +3,12 @@
  "variant": "dressed",
  "workbench_commit": "3454196",
  "character": "gunslinger",
- "donor": "silent",
+ "donor": "restsite_silent",
  "edits_sha256": null,
  "palettes_sha256": "d6f0c3e9c174154c5ee17c5a678333adac427300d0a3f242b067941efe56c421",
  "files": {
-  "silent.atlas": "44cb6ea6945c0ab6e846310c4dfbdae88be2e68bad8ede1af1b4ab835fd16da3",
-  "silent.skel": "17294850ae4e0b397b4dc2733af03d2b0d53d88fa504ad69a36d68bb2bbac6b0",
-  "silent.png": "691b1855d4bae18dda35ae67a74382ec77ce482e290cd056e27c89fed870b596"
+  "restsite_silent.atlas": "9bc7e833c4b5dbb5296adc28bcbacf49ada0f2b701eea6c35e1e1c2aa6305842",
+  "restsite_silent.skel": "1a9965f1d69f0434efc8e2a89fa471f67fcf82bd63bc2631207d9104c6238427",
+  "restsite_silent.png": "7c88ebc9e9702ed3cc4ba166f36b4c6d431badce0745b364fd59a707f89cd030"
  }
 }

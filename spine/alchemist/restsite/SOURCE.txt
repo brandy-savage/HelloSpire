@@ -3,12 +3,12 @@
  "variant": "dressed",
  "workbench_commit": "3454196",
  "character": "alchemist",
- "donor": "necrobinder",
+ "donor": "restsite_necrobinder",
  "edits_sha256": null,
  "palettes_sha256": "d6f0c3e9c174154c5ee17c5a678333adac427300d0a3f242b067941efe56c421",
  "files": {
-  "necrobinder.atlas": "6a7c2a7e026d1ee92decd9c32f428e831030858635311217e619f7e60b8a3a1c",
-  "necrobinder.skel": "4a90355aa742a4fce8fde773d1b1456619cbdfdff46618e46f1ddfd72ffaf524",
-  "necrobinder.png": "5c0a9d7ea891b1dc4ad6a1bbed9ca99661ba8ae23aa9a50e51099a30f455f341"
+  "restsite_necrobinder.atlas": "6608bc1bcc512e25e49708b592941ad15e6e1e5904fd1bdd5382cbd1bcaaecc0",
+  "restsite_necrobinder.skel": "eb8717930613a5d47d6fe814dd109325337df1d00695203de0f011efc79985e2",
+  "restsite_necrobinder.png": "77dcd1090c91aeb1a79e37fd051445200e27f6ce000c91b057be3602979110c5"
  }
 }

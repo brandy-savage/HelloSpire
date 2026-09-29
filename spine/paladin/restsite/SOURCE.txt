@@ -1,0 +1,14 @@
+{
+ "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files (JSON in a .txt so the game does not scan it as a mod manifest)",
+ "variant": "dressed",
+ "workbench_commit": "3454196",
+ "character": "paladin",
+ "donor": "restsite_ironclad",
+ "edits_sha256": null,
+ "palettes_sha256": "d6f0c3e9c174154c5ee17c5a678333adac427300d0a3f242b067941efe56c421",
+ "files": {
+  "restsite_ironclad.atlas": "465b4035e490fb89f2c8ec2840348977329508e4bf7023626b9d9ff76f26835b",
+  "restsite_ironclad.skel": "10887969c402fad0f8b7775105ea3bbbffeb4a51d273a75448a768322a64044f",
+  "restsite_ironclad.png": "bacfc9366891dc95f47a163e4e0cf03899fdaadc00737b670355be8534c7c459"
+ }
+}

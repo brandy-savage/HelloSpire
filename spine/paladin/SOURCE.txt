@@ -1,7 +1,7 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files (JSON in a .txt so the game does not scan it as a mod manifest)",
  "variant": "dressed",
- "workbench_commit": "420c1aa",
+ "workbench_commit": "3454196",
  "character": "paladin",
  "donor": "ironclad",
  "edits_sha256": null,

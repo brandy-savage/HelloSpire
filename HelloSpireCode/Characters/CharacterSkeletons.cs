@@ -22,8 +22,8 @@ namespace HelloSpire.HelloSpireCode.Characters;
 /// no .spskel/.spatlas wrappers or pck import required.
 ///
 /// Missing folder or failed load degrades silently to the CharacterSkins shader repaint,
-/// same spirit as that patch's own fallback. The shop swaps to the same rig (see RoomSkins);
-/// the rest site still uses the shader repaint for now.
+/// same spirit as that patch's own fallback. The shop swaps to the same rig, and the rest site
+/// to the character's spine/<name>/restsite/ rig (see RoomSkins).
 /// </summary>
 [HarmonyPatch(typeof(Creature), nameof(Creature.CreateVisuals))]
 internal static class CharacterSkeletons
@@ -38,23 +38,29 @@ internal static class CharacterSkeletons
         _ => null,
     };
 
-    /// <summary>The custom rig for a HelloSpire character, or null to keep the inherited one.</summary>
-    internal static MegaSkeletonDataResource? SkeletonFor(MegaCrit.Sts2.Core.Models.CharacterModel? character)
+    /// <summary>The custom rig for a HelloSpire character, or null to keep the inherited one.
+    /// <paramref name="variant"/> selects a sub-rig folder: null = the combat body
+    /// (spine/&lt;name&gt;/), "restsite" = the campfire body (spine/&lt;name&gt;/restsite/, the
+    /// donor's own rest-site skeleton with its act loops, recoloured).</summary>
+    internal static MegaSkeletonDataResource? SkeletonFor(MegaCrit.Sts2.Core.Models.CharacterModel? character,
+                                                          string? variant = null)
     {
         if (FolderFor(character) is not { } folder) return null;
+        if (variant != null) folder = Path.Combine(folder, variant);
         if (Cache.TryGetValue(folder, out var cached)) return cached;
-        var built = Build(folder);
+        var built = Build(folder, optional: variant != null);
         Cache[folder] = built; // negative results cached too — one disk probe per run
         return built;
     }
 
-    private static MegaSkeletonDataResource? Build(string folder)
+    private static MegaSkeletonDataResource? Build(string folder, bool optional = false)
     {
         var modDir = Path.GetDirectoryName(typeof(CharacterSkeletons).Assembly.Location);
         if (modDir == null) return null;
         var dir = Path.Combine(modDir, "spine", folder);
         if (!Directory.Exists(dir))
         {
+            if (optional) return null;   // a variant rig is allowed to be absent
             // Loud on purpose: a missing folder means an incomplete install (the mod was
             // copied without spine/), and the character silently degrades to the shader
             // repaint. This line is how a co-op partner's godot.log proves which it is.
