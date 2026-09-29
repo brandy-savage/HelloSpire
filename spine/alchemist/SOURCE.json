@@ -1,18 +1,13 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
- "variant": "stick",
- "workbench_commit": "fcca5c0",
+ "workbench_commit": "5534cd8",
  "character": "alchemist",
- "donor": "ironclad",
- "edits_sha256": "67291c08feb5a467370ff78f80393002718404e331c8e26632c6c2b054415fcd",
+ "donor": "necrobinder",
+ "edits_sha256": null,
  "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
  "files": {
-  "ironclad.atlas": "33d66629f9c5b43a80d7d5c947714666d686f92fa25673e63616b2a6e1d1e9c7",
-  "ironclad.skel": "dc215ab3e9f20e72df09a84688bc1387cc033757db678046c914cb2aabea697e",
-  "ironclad.png": "8a79d5fd492d39d0b06395c0af3cfd1a90e9fa8f46c23b67bff6c67c030af13d",
-  "ironclad_2.png": "71e89ba1f3d64fdd75dcab3774989beab03a8098e50e575e72d3f682ea91a509",
-  "ironclad_3.png": "5a3f8a3f0f56ef6bf6af33dce309202c2f7e11fda89212e9c7271e80b59d6c93",
-  "ironclad_4.png": "dddb3c8e0f2b6eddf05504ede8f28ffb195b0ce93adc7104efb47d494f2d8f92",
-  "stick.png": "0375b20854f32a37e39ada7d4afb8ecdac04dba7a9aaf90c1a636c3e4f977035"
+  "necrobinder.atlas": "6a7c2a7e026d1ee92decd9c32f428e831030858635311217e619f7e60b8a3a1c",
+  "necrobinder.skel": "4a90355aa742a4fce8fde773d1b1456619cbdfdff46618e46f1ddfd72ffaf524",
+  "necrobinder.png": "98f6f339b0e6c5a60284e09eea87a4d18b62966a5999f6b2a78054ca1292fa83"
  }
 }
