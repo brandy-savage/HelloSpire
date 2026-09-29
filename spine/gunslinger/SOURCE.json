@@ -1,0 +1,13 @@
+{
+ "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
+ "workbench_commit": "5534cd8",
+ "character": "gunslinger",
+ "donor": "silent",
+ "edits_sha256": "782c3707bc602ee13ea143e51e6b19c0ee49207dff9b1ca6c7fd4da4326ecbea",
+ "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
+ "files": {
+  "silent.atlas": "44cb6ea6945c0ab6e846310c4dfbdae88be2e68bad8ede1af1b4ab835fd16da3",
+  "silent.skel": "19579761b430207f7a366db70a1ac51d3441e1e5ce89e729f3aae4f4aaef0a9e",
+  "silent.png": "33668fdee59ea9f829e6fe900abab9a7e2bd2d185851ebaa354c2a6dceefab3c"
+ }
+}

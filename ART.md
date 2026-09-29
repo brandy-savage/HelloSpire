@@ -195,11 +195,17 @@ from it.
 
 On top of that, `Characters/CharacterSkeletons.cs` swaps in a mod-local rig for any character with
 a `spine/<character>/` folder — plain `.atlas`/`.skel`/page `.png`, no `.spskel` wrapper or pck
-import needed — and `Characters/CharacterSkins.cs` repaints whatever rig is in use through a
-per-character palette shader. Today the Paladin ships a reskinned Ironclad rig, the Gunslinger
-ships an unrepainted copy of the Silent rig (its rust comes entirely from the shader), and the
-Alchemist ships no rig at all and rides the inherited one. A missing folder is not an error: it
-degrades to the shader repaint alone.
+import needed. All three characters ship one: the Paladin on the Ironclad rig, the Gunslinger on
+the Silent, the Alchemist on the Necrobinder, each with its palette baked into the pages and its
+stance set by skeleton edits. `Characters/CharacterSkins.cs` repaints only the rest-site, shop and
+energy-counter art (still borrowed from the Ironclad) through a per-character shader.
+
+**Every one of those files is generated.** The rigs, the shaders and the `SOURCE.json` beside each
+rig all come out of the character workbench, [sts2-reskin-pipeline](https://github.com/r0zar/sts2-reskin-pipeline),
+from one set of inputs: donor choice, palette rules, skeleton edits, replacement part art. See
+`spine/README.md`. Do not paint a page, edit a shader or tweak a `.skel` in this repo — change the
+workbench input and re-run `tools/package.py <character> --install-hellospire`, then commit both.
+`tools/package.py all --check` reports any drift between this repo and the workbench.
 
 ## Tools
 

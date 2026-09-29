@@ -1,0 +1,13 @@
+{
+ "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
+ "workbench_commit": "5534cd8",
+ "character": "alchemist",
+ "donor": "necrobinder",
+ "edits_sha256": null,
+ "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
+ "files": {
+  "necrobinder.atlas": "6a7c2a7e026d1ee92decd9c32f428e831030858635311217e619f7e60b8a3a1c",
+  "necrobinder.skel": "4a90355aa742a4fce8fde773d1b1456619cbdfdff46618e46f1ddfd72ffaf524",
+  "necrobinder.png": "98f6f339b0e6c5a60284e09eea87a4d18b62966a5999f6b2a78054ca1292fa83"
+ }
+}
