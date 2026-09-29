@@ -1,9 +1,9 @@
-﻿{
+{
   "id": "HelloSpire",
   "name": "HelloSpire",
   "author": "Ross Ragsdale",
   "description": "A three-character pack: The Paladin, The Alchemist, and The Gunslinger. Built as one mod so co-op groups only need to match a single gameplay-affecting dependency.",
-  "version": "v0.0.0",
+  "version": "v0.0.1",
   "min_game_version": "0.107.0",
   "has_pck": true,
   "has_dll": true,
