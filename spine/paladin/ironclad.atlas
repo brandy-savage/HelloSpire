@@ -246,3 +246,13 @@ filter:Linear,Linear
 scale:0.32
 slash/slash_placeholder
 bounds:2,2,13,38
+
+stick.png
+size:64,64
+filter:Linear,Linear
+bar
+bounds:0,0,64,16
+circle
+bounds:0,16,32,32
+tri
+bounds:32,16,32,32

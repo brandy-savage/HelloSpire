@@ -175,3 +175,13 @@ rotate:90
 sythe_dissolve
 bounds:850,89,213,432
 offsets:2,0,215,432
+
+stick.png
+size:64,64
+filter:Linear,Linear
+bar
+bounds:0,0,64,16
+circle
+bounds:0,16,32,32
+tri
+bounds:32,16,32,32
