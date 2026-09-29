@@ -1,0 +1,544 @@
+<title>The Gunslinger — Wireframe</title>
+<style>
+  :root{
+    --night:    #120e0a;
+    --panel:    #1c150f;
+    --hairline: #3a2c1e;
+    --ivory:    #ead9c2;
+    --ivory-dim:#b0a08c;
+    --accent:   #d9a05b;
+    --accent-2: #e9b978;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--night);
+    color:var(--ivory);
+    font-family:Georgia,'Iowan Old Style',serif;
+    font-size:1rem;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent); color:var(--night); }
+  .wrap{ max-width:1100px; margin:0 auto; padding:clamp(20px,4vw,48px) clamp(18px,4vw,36px) 80px; }
+  h1,h2{ font-family:Georgia,serif; font-weight:700; letter-spacing:0.01em; color:var(--ivory); margin:0; }
+  h1{ font-size:2.1rem; }
+  h2{ font-size:1rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent-2); margin:0 0 8px; }
+  .kicker{
+    font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--ivory-dim); margin:0 0 10px;
+  }
+  .tag-row{
+    display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 30px;
+    font-family:ui-monospace,monospace; font-size:0.75rem; letter-spacing:0.04em;
+    color:var(--ivory-dim);
+  }
+  .tag-row span{ border:1px solid var(--hairline); border-radius:3px; padding:3px 8px; }
+  .stage{ display:grid; grid-template-columns:480px 1fr; gap:28px; align-items:start; }
+  @media (max-width:880px){ .stage{ grid-template-columns:1fr; } }
+  .rig-panel{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:6px;
+    padding:12px; position:sticky; top:16px;
+  }
+  svg#rig{ width:100%; height:auto; display:block; background:radial-gradient(ellipse at 50% 30%, #241a10, var(--panel)); border-radius:4px; }
+  .controls{ display:flex; justify-content:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .controls .group{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .controls .divider{ width:1px; align-self:stretch; background:var(--hairline); margin:2px 2px; }
+  button{
+    background:transparent; border:1px solid var(--accent); color:var(--accent-2);
+    font-family:ui-monospace,monospace; font-size:0.72rem; letter-spacing:0.05em;
+    text-transform:uppercase; padding:7px 12px; border-radius:3px; cursor:pointer;
+  }
+  button:hover{ background:var(--accent); color:var(--night); }
+  .status{
+    text-align:center; margin-top:8px; font-family:ui-monospace,monospace;
+    font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ivory-dim);
+  }
+  .status b{ color:var(--accent-2); }
+  .notes-panel section{ margin-bottom:26px; }
+  .notes-panel p{ margin:0 0 10px; color:var(--ivory); }
+  dl.slots{ margin:0; display:grid; gap:14px; }
+  dl.slots > div{ border-left:2px solid var(--accent); padding-left:12px; }
+  dl.slots dt{
+    font-family:ui-monospace,monospace; font-size:0.72rem; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--accent-2);
+  }
+  dl.slots dd{ margin:2px 0 0; color:var(--ivory-dim); font-size:0.95rem; }
+  .footer{ margin-top:50px; padding-top:18px; border-top:1px solid var(--hairline); color:var(--ivory-dim); font-size:0.85rem; }
+  a{ color:var(--accent-2); }
+</style>
+
+<div class="wrap">
+  <div class="kicker">HelloSpire · wireframe prototype</div>
+  <h1>The Gunslinger</h1>
+  <div class="tag-row">
+    <span>72 HP</span><span>weathered brass #d9a05b</span><span>the Cylinder</span><span>calm / dangerous</span>
+  </div>
+
+  <div class="stage">
+    <div class="rig-panel">
+      <svg id="rig" viewBox="0 0 480 720" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="controls">
+        <div class="group">
+          <button id="btn-idle">Idle / gait</button>
+          <button id="btn-attack">Attack</button>
+          <button id="btn-buff">Self buff</button>
+        </div>
+        <div class="divider"></div>
+        <div class="group">
+          <button id="toggle-anim">Pause (view stance)</button>
+          <button id="toggle-markers">Hide attachment markers</button>
+          <button id="toggle-art">Hide art overlay</button>
+        </div>
+      </div>
+      <div class="status">Playing: <b id="move-status">Idle / gait</b></div>
+    </div>
+
+    <div class="notes-panel">
+      <section>
+        <h2>Stance</h2>
+        <p>Contrapposto, angled three-quarters rather than squared to the viewer — a duelist's
+        stance, not a soldier's. Weight sits on the back leg; the front leg is soft, ready to
+        shift. The gun hand is bent tight and held near the hip, hovering just above the holster;
+        the off hand hangs loose.</p>
+      </section>
+      <section>
+        <h2>Movement</h2>
+        <p>Idle is mostly still — a slow, low-amplitude sway plus a long coat-tail flutter and a
+        small fast tremor in the gun-hand forearm, the one part of this character that hasn't
+        fully decided to stay calm. <b>Attack</b> is fast and snappy: the gun hand whips up into
+        aim and kicks back on the shot in under half a second, no wind-up — this class doesn't
+        telegraph. <b>Self buff</b> is a confident cylinder spin: the gun hand rotates through a
+        full flourish while the body leans back a beat, a small showman's gesture between
+        exchanges.</p>
+      </section>
+      <section>
+        <h2>Component map — the grand vision</h2>
+        <dl class="slots" id="slot-legend"></dl>
+      </section>
+    </div>
+  </div>
+
+  <p class="footer">
+    A structural prototype, not a game asset — same spirit as <a href="../concept-art/README.md">concept-art/</a>.
+    Real combat rigs are generated by the external <code>sts2-reskin-pipeline</code> workbench into
+    <a href="../spine/README.md">spine/gunslinger/</a>; this is a design reference for that pipeline's
+    <code>edits.json</code> (stance/posture/proportions) and its <code>art_in/</code> (part art),
+    not a replacement for either. See <a href="../design/gunslinger.md">design/gunslinger.md</a> for the
+    mechanical identity this stance is built from. Every part below is a procedurally drawn
+    placeholder icon in the character palette — no reference art exists yet for this character,
+    unlike the Paladin's head.
+  </p>
+</div>
+
+<script>
+(function(){
+  const TAU = Math.PI/180;
+  const dir = deg => { const r=deg*TAU; return {x:Math.cos(r), y:Math.sin(r)}; };
+  const DARK = '#120e0a';
+
+  const RIG = {
+    color: '#d9a05b',
+    accent: '#e9b978',
+    base: '#6b4a30', // worn leather/wood
+    originX: 240,
+    originY: 460,
+    headBone: 'head_stub',
+    headRadius: 22,
+    bob: { amp: 1, freq: 0.12 },
+    bones: [
+      { id:'pelvis',      parent:null,       length:0,  thickness:0,  angle: 6,
+        move:{ amp:0.5, freq:0.12 } },
+      { id:'spine',       parent:'pelvis',   length:60, thickness:16, angle: -94,
+        move:{ amp:0.8, freq:0.12, phase:0.05 } },
+      { id:'chest',       parent:'spine',    length:42, thickness:17, angle: -3,
+        move:{ amp:0.8, freq:0.12, phase:0.1 } },
+      { id:'neck',        parent:'chest',    length:18, thickness:11, angle: 2,
+        move:{ amp:0.5, freq:0.12, phase:0.15 } },
+      { id:'head_stub',   parent:'neck',     length:10, thickness:8,  angle: -4,
+        move:{ amp:2, freq:0.05 } },
+      { id:'back',        parent:'spine',    length:34, thickness:9,  angle: 100,
+        move:{ amp:5, freq:0.1 } },
+      { id:'belt',        parent:'pelvis',   length:16, thickness:9,  angle: 100 },
+
+      { id:'l_upper_arm', parent:'chest',    length:52, thickness:13, angle: -98,
+        move:{ amp:1, freq:0.12, phase:0.1 } },
+      { id:'l_forearm',   parent:'l_upper_arm', length:46, thickness:11, angle: 20,
+        move:{ amp:1, freq:0.12, phase:0.15 } },
+      { id:'l_hand',      parent:'l_forearm',   length:15, thickness:7,  angle: 0 },
+
+      { id:'r_upper_arm', parent:'chest',    length:52, thickness:13, angle: 92,
+        move:{ amp:1, freq:0.12, phase:0.2 } },
+      { id:'r_forearm',   parent:'r_upper_arm', length:46, thickness:11, angle: 70,
+        move:{ amp:1, freq:0.12, phase:0.25, amp2:2.5, freq2:0.55, phase2:0.4 } },
+      { id:'r_hand',      parent:'r_forearm',   length:15, thickness:7,  angle: 0 },
+
+      { id:'l_thigh',     parent:'pelvis',   length:66, thickness:14, angle: 94 },
+      { id:'l_shin',      parent:'l_thigh',  length:62, thickness:12, angle: 10,
+        move:{ amp:1, freq:0.12 } },
+      { id:'l_foot',      parent:'l_shin',   length:21, thickness:8,  angle: 96 },
+
+      { id:'r_thigh',     parent:'pelvis',   length:66, thickness:14, angle: 76 },
+      { id:'r_shin',      parent:'r_thigh',  length:62, thickness:12, angle: 6,
+        move:{ amp:0.5, freq:0.12 } },
+      { id:'r_foot',      parent:'r_shin',   length:21, thickness:8,  angle: 90 },
+    ],
+    slots: [
+      { id:'head',   bone:'head_stub',   t:1.6, off:0,  tag:'HEAD',   label:'Head — wide-brim hat',
+        vision:'A wide brim casting the eyes in shadow. Calm-dangerous has to read at a glance, from across the room — no face detail needed for that.',
+        art:{ bone:'head_stub', t:1.0, w:60, h:60, anchor:{x:0.5,y:0.5}, rotationOffset:93, shapes:[
+          {tag:'ellipse', attrs:{cx:30,cy:38,rx:28,ry:9, fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'rect', attrs:{x:16,y:10,width:28,height:26,rx:10, fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'rect', attrs:{x:16,y:30,width:28,height:5, fill:'color'}},
+        ]} },
+      { id:'chest',  bone:'chest',       t:0.6, off:0,  tag:'CHEST',  label:'Chest — duster & bandolier',
+        vision:'Open duster over a vest, a bandolier of rounds across the chest colour-coded to match the Cylinder HUD’s ammo colours — ties the model directly to the mechanic.',
+        art:{ bone:'chest', t:0.5, w:80, h:66, anchor:{x:0.5,y:0.5}, rotationOffset:91, shapes:[
+          {tag:'polygon', attrs:{points:'16,10 36,10 30,60 12,55', fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'polygon', attrs:{points:'64,10 44,10 50,60 68,55', fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'rect', attrs:{x:34,y:10,width:12,height:50, fill:'#4a3520'}},
+          {tag:'line', attrs:{x1:18,y1:16,x2:58,y2:54, stroke:'color','stroke-width':6}},
+          {tag:'circle', attrs:{cx:28,cy:25.5,r:3, fill:'accent', stroke:DARK,'stroke-width':1}},
+          {tag:'circle', attrs:{cx:36,cy:33,r:3, fill:'accent', stroke:DARK,'stroke-width':1}},
+          {tag:'circle', attrs:{cx:44,cy:40.7,r:3, fill:'accent', stroke:DARK,'stroke-width':1}},
+          {tag:'circle', attrs:{cx:52,cy:48.3,r:3, fill:'accent', stroke:DARK,'stroke-width':1}},
+        ]} },
+      { id:'back',   bone:'back',        t:1,   off:0,  tag:'BACK',   label:'Back — coat tail',
+        vision:'The one piece of this silhouette allowed to move freely. Everything else here is trained stillness; the coat is the only visible sign there’s wind, or motion, at all.',
+        art:{ bone:'back', t:1, w:60, h:90, anchor:{x:0.5,y:0.1}, rotationOffset:-12, shapes:[
+          {tag:'polygon', attrs:{points:'16,6 44,6 52,84 30,90 8,84', fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'line', attrs:{x1:30,y1:20,x2:26,y2:80, stroke:DARK,'stroke-width':1.5, opacity:0.5}},
+        ]} },
+      { id:'belt',   bone:'belt',        t:1,   off:0,  tag:'BELT',   label:'Belt — holster & spare rounds',
+        vision:'Holster on the gun-hand hip, a small pouch of spare rounds on the other side.',
+        art:{ bone:'belt', t:1, w:60, h:40, anchor:{x:0.5,y:0.5}, rotationOffset:-106, shapes:[
+          {tag:'rect', attrs:{x:4,y:16,width:52,height:6, fill:'base', stroke:DARK,'stroke-width':1.5}},
+          {tag:'polygon', attrs:{points:'14,20 30,20 28,38 16,38', fill:'base', stroke:'color','stroke-width':2}},
+          {tag:'rect', attrs:{x:36,y:20,width:16,height:14,rx:3, fill:'base', stroke:'color','stroke-width':1.5}},
+        ]} },
+      { id:'l_sh',   bone:'l_upper_arm', t:0,   off:0,  tag:'L-SHLD', label:'Off shoulder',
+        vision:'No armor here — a shirt sleeve, maybe a suspender strap. This character’s defense is positioning, not plate.',
+        art:{ bone:'l_upper_arm', t:0, w:44, h:44, anchor:{x:0.5,y:0.5}, rotationOffset:189, shapes:[
+          {tag:'ellipse', attrs:{cx:22,cy:20,rx:14,ry:11, fill:'base', opacity:0.4, stroke:DARK,'stroke-width':1.5}},
+          {tag:'line', attrs:{x1:10,y1:10,x2:34,y2:30, stroke:'color','stroke-width':3}},
+        ]} },
+      { id:'r_sh',   bone:'r_upper_arm', t:0,   off:0,  tag:'R-SHLD', label:'Gun shoulder',
+        vision:'Same — unarmored, full range of motion for the draw.',
+        art:{ bone:'r_upper_arm', t:0, w:44, h:44, anchor:{x:0.5,y:0.5}, rotationOffset:-1, shapes:[
+          {tag:'ellipse', attrs:{cx:22,cy:20,rx:14,ry:11, fill:'base', opacity:0.4, stroke:DARK,'stroke-width':1.5}},
+          {tag:'line', attrs:{x1:34,y1:10,x2:10,y2:30, stroke:'color','stroke-width':3}},
+        ]} },
+      { id:'l_hand', bone:'l_hand',      t:1,   off:0,  tag:'L-HAND', label:'Off hand — free for Gadgets',
+        vision:'Empty by default; holds whatever Gadget card is in play — a tool, a trinket, a thrown item.',
+        art:{ bone:'l_hand', t:1, w:44, h:44, anchor:{x:0.5,y:0.5}, rotationOffset:169, shapes:[
+          {tag:'rect', attrs:{x:14,y:14,width:16,height:16,rx:3, fill:'color', stroke:DARK,'stroke-width':2}},
+          {tag:'line', attrs:{x1:22,y1:14,x2:22,y2:6, stroke:'color','stroke-width':2}},
+          {tag:'circle', attrs:{cx:22,cy:5,r:2.5, fill:'accent'}},
+        ]} },
+      { id:'r_hand', bone:'r_hand',      t:1,   off:0,  tag:'R-HAND', label:'Gun hand — revolver',
+        vision:'The revolver itself, cylinder visible and rotatable to mirror the six-chamber HUD state directly on the model.',
+        art:{ bone:'r_hand', t:1, w:50, h:40, anchor:{x:0.5,y:0.5}, rotationOffset:-71, shapes:[
+          {tag:'rect', attrs:{x:6,y:16,width:28,height:7,rx:2, fill:'base', stroke:DARK,'stroke-width':1.5}},
+          {tag:'polygon', attrs:{points:'30,16 40,16 40,34 32,34', fill:'base', stroke:DARK,'stroke-width':1.5}},
+          {tag:'circle', attrs:{cx:34,cy:19.5,r:9, fill:'color', stroke:DARK,'stroke-width':2}},
+          {tag:'circle', attrs:{cx:39.5,cy:19.5,r:1.4, fill:DARK}},
+          {tag:'circle', attrs:{cx:36.75,cy:14.73,r:1.4, fill:DARK}},
+          {tag:'circle', attrs:{cx:31.25,cy:14.73,r:1.4, fill:DARK}},
+          {tag:'circle', attrs:{cx:28.5,cy:19.5,r:1.4, fill:DARK}},
+          {tag:'circle', attrs:{cx:31.25,cy:24.27,r:1.4, fill:DARK}},
+          {tag:'circle', attrs:{cx:36.75,cy:24.27,r:1.4, fill:DARK}},
+        ]} },
+      { id:'feet',   bone:'r_foot',      t:1,   off:0,  tag:'FEET',   label:'Feet — boots & spurs',
+        vision:'Worn boots with spurs — a quiet sound-cue opportunity as much as a visual one.',
+        art:{ bone:'r_foot', t:1, w:50, h:36, anchor:{x:0.5,y:0.5}, rotationOffset:-178, shapes:[
+          {tag:'polygon', attrs:{points:'6,26 6,14 16,8 38,8 44,16 44,28 34,32 10,32', fill:'base', stroke:DARK,'stroke-width':2}},
+          {tag:'circle', attrs:{cx:46,cy:24,r:4, fill:'color', stroke:DARK,'stroke-width':1.5}},
+          {tag:'line', attrs:{x1:46,y1:24,x2:50,y2:20, stroke:'color','stroke-width':1.5}},
+          {tag:'line', attrs:{x1:46,y1:24,x2:52,y2:24, stroke:'color','stroke-width':1.5}},
+          {tag:'line', attrs:{x1:46,y1:24,x2:50,y2:28, stroke:'color','stroke-width':1.5}},
+        ]} },
+    ],
+    moves: {
+      attack: {
+        duration: 0.5,
+        keyframes: [
+          { at:0.0,  pose:{} },
+          { at:0.3,  pose:{ r_upper_arm:-20, r_forearm:-50, chest:-3 } },
+          { at:0.7,  pose:{ r_upper_arm:-15, r_forearm:-70, chest:-8, pelvis:-3 } },
+          { at:1.0,  pose:{} },
+        ],
+        effect: { bone:'r_hand', t:1, type:'flash', peakAt:0.7, width:0.1, color:'#e9b978' },
+      },
+      buff: {
+        duration: 1.0,
+        keyframes: [
+          { at:0.0, pose:{ r_forearm:0 } },
+          { at:0.5, pose:{ r_forearm:180, spine:-6, head_stub:-6 } },
+          { at:1.0, pose:{ r_forearm:360, spine:0, head_stub:0 } },
+        ],
+        effect: { bone:'r_hand', t:1, type:'glow', fadeIn:0.2, fadeOut:0.3, color:'#e9b978' },
+      },
+    },
+  };
+
+  const PALETTE = { color: RIG.color, accent: RIG.accent, base: RIG.base };
+  const resolve = v => PALETTE[v] !== undefined ? PALETTE[v] : v;
+
+  const svg = document.getElementById('rig');
+  const ns = 'http://www.w3.org/2000/svg';
+  const boneEls = {}, jointEls = {};
+
+  RIG.bones.forEach(b=>{
+    if(b.length>0){
+      const line=document.createElementNS(ns,'line');
+      line.setAttribute('stroke',RIG.color);
+      line.setAttribute('stroke-width',b.thickness);
+      line.setAttribute('stroke-linecap','round');
+      line.setAttribute('opacity',0.85);
+      svg.appendChild(line);
+      boneEls[b.id]=line;
+    }
+    const j=document.createElementNS(ns,'circle');
+    j.setAttribute('r', Math.max(3,(b.thickness||10)/2.6));
+    j.setAttribute('fill',DARK);
+    j.setAttribute('stroke',RIG.color);
+    j.setAttribute('stroke-width',2);
+    svg.appendChild(j);
+    jointEls[b.id]=j;
+  });
+
+  const head=document.createElementNS(ns,'circle');
+  head.setAttribute('fill',DARK);
+  head.setAttribute('stroke',RIG.color);
+  head.setAttribute('stroke-width',3);
+  head.setAttribute('r',RIG.headRadius);
+  svg.appendChild(head);
+
+  const slotEls={}, artEls={};
+  const legend=document.getElementById('slot-legend');
+  RIG.slots.forEach(s=>{
+    if(s.art){
+      const ag=document.createElementNS(ns,'g');
+      if(s.art.src){
+        const img=document.createElementNS(ns,'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink','href', s.art.src);
+        img.setAttribute('href', s.art.src);
+        img.setAttribute('x',0); img.setAttribute('y',0);
+        img.setAttribute('width', s.art.w); img.setAttribute('height', s.art.h);
+        img.setAttribute('preserveAspectRatio','xMidYMid slice');
+        ag.appendChild(img);
+      } else if(s.art.shapes){
+        s.art.shapes.forEach(sh=>{
+          const el=document.createElementNS(ns, sh.tag);
+          Object.entries(sh.attrs).forEach(([k,v])=>el.setAttribute(k, resolve(v)));
+          ag.appendChild(el);
+        });
+      }
+      const frame=document.createElementNS(ns,'rect');
+      frame.setAttribute('x',0); frame.setAttribute('y',0);
+      frame.setAttribute('width', s.art.w); frame.setAttribute('height', s.art.h);
+      frame.setAttribute('fill','none');
+      frame.setAttribute('stroke', RIG.accent);
+      frame.setAttribute('stroke-width', 1);
+      frame.setAttribute('opacity', 0.4);
+      ag.appendChild(frame);
+      svg.appendChild(ag);
+      artEls[s.id]=ag;
+    }
+
+    const g=document.createElementNS(ns,'g');
+    const m=document.createElementNS(ns,'rect');
+    m.setAttribute('width',10); m.setAttribute('height',10);
+    m.setAttribute('x',-5); m.setAttribute('y',-5);
+    m.setAttribute('transform','rotate(45)');
+    m.setAttribute('fill',RIG.accent);
+    m.setAttribute('stroke',DARK);
+    m.setAttribute('stroke-width',1.5);
+    g.appendChild(m);
+    svg.appendChild(g);
+    slotEls[s.id]=g;
+
+    const div=document.createElement('div');
+    const dt=document.createElement('dt');
+    dt.textContent = `${s.tag} — ${s.label}` + (s.art ? (s.art.src ? ' ★ real art' : ' ▲ generated') : '');
+    const dd=document.createElement('dd');
+    dd.textContent = s.vision;
+    div.appendChild(dt); div.appendChild(dd);
+    legend.appendChild(div);
+  });
+
+  const effectDot=document.createElementNS(ns,'circle');
+  effectDot.setAttribute('fill','none');
+  effectDot.setAttribute('opacity',0);
+  svg.appendChild(effectDot);
+
+  let activeMove=null, moveKind=null, moveStart=0, lastT=0;
+  function bonesOf(move){
+    if(!move._bones){
+      const set=new Set();
+      move.keyframes.forEach(k=>Object.keys(k.pose||{}).forEach(id=>set.add(id)));
+      move._bones=set;
+    }
+    return move._bones;
+  }
+  function evalMove(move, frac){
+    const kfs=move.keyframes;
+    let i=0;
+    while(i<kfs.length-2 && frac>kfs[i+1].at) i++;
+    const a=kfs[i], b=kfs[i+1];
+    const span=(b.at-a.at)||1;
+    let f=(frac-a.at)/span; f=Math.max(0,Math.min(1,f));
+    const e=f*f*(3-2*f);
+    const pose={};
+    bonesOf(move).forEach(id=>{
+      const av=(a.pose&&a.pose[id])||0, bv=(b.pose&&b.pose[id])||0;
+      pose[id]=av+(bv-av)*e;
+    });
+    return pose;
+  }
+  function effectAmount(eff, frac){
+    if(eff.type==='flash'){
+      const w=eff.width||0.15;
+      return Math.max(0, 1-Math.abs(frac-(eff.peakAt!=null?eff.peakAt:0.5))/w);
+    }
+    if(eff.type==='glow'){
+      const fi=eff.fadeIn||0.3, fo=eff.fadeOut||0.15;
+      if(frac<fi) return frac/fi;
+      if(frac>1-fo) return (1-frac)/fo;
+      return 1;
+    }
+    return 0;
+  }
+  function trigger(kind){
+    const mv=RIG.moves[kind];
+    if(!mv) return;
+    activeMove=mv; moveKind=kind; moveStart=lastT;
+  }
+
+  const world={};
+  function solve(t, animate){
+    lastT=t;
+    let pose=null, moveBones=null;
+    if(animate && activeMove){
+      const frac=(t-moveStart)/activeMove.duration;
+      if(frac>=1){ activeMove=null; moveKind=null; }
+      else { pose=evalMove(activeMove, Math.max(0,frac)); moveBones=bonesOf(activeMove); }
+    }
+    RIG.bones.forEach(b=>{
+      const parent = b.parent ? world[b.parent] : null;
+      let ang = (parent? parent.angle : 0) + b.angle;
+      if(animate){
+        if(pose && moveBones.has(b.id)){
+          ang += pose[b.id]||0;
+        } else if(b.move){
+          const m=b.move;
+          ang += (m.amp||0)*Math.sin(2*Math.PI*(m.freq||0)*t + (m.phase||0)*2*Math.PI);
+          if(m.amp2) ang += m.amp2*Math.sin(2*Math.PI*(m.freq2||0)*t + (m.phase2||0)*2*Math.PI);
+        }
+      }
+      let sx = parent? parent.x : RIG.originX;
+      let sy = parent? parent.y : RIG.originY;
+      if(!parent && animate && RIG.bob){
+        sy += RIG.bob.amp*Math.sin(2*Math.PI*RIG.bob.freq*t);
+      }
+      const d=dir(ang);
+      const ex=sx+d.x*b.length, ey=sy+d.y*b.length;
+      world[b.id]={x:ex,y:ey,angle:ang,sx,sy};
+    });
+  }
+
+  function updateEffect(t, animate){
+    if(!animate || !activeMove || !activeMove.effect){ effectDot.setAttribute('opacity',0); return; }
+    const frac=(t-moveStart)/activeMove.duration;
+    if(frac<0||frac>1){ effectDot.setAttribute('opacity',0); return; }
+    const eff=activeMove.effect;
+    const amt=effectAmount(eff, frac);
+    if(amt<=0){ effectDot.setAttribute('opacity',0); return; }
+    const b=world[eff.bone];
+    const x=b.sx+(b.x-b.sx)*eff.t, y=b.sy+(b.y-b.sy)*eff.t;
+    effectDot.setAttribute('cx',x); effectDot.setAttribute('cy',y);
+    effectDot.setAttribute('r', 4+amt*(eff.type==='flash'?22:14));
+    effectDot.setAttribute('stroke', eff.color);
+    effectDot.setAttribute('stroke-width', 2.5);
+    effectDot.setAttribute('opacity', amt*(eff.type==='flash'?0.9:0.6));
+  }
+
+  const statusEl=document.getElementById('move-status');
+  function render(t, animate){
+    solve(t, animate);
+    RIG.bones.forEach(b=>{
+      const w=world[b.id];
+      if(boneEls[b.id]){
+        boneEls[b.id].setAttribute('x1',w.sx);
+        boneEls[b.id].setAttribute('y1',w.sy);
+        boneEls[b.id].setAttribute('x2',w.x);
+        boneEls[b.id].setAttribute('y2',w.y);
+      }
+      jointEls[b.id].setAttribute('cx',w.sx);
+      jointEls[b.id].setAttribute('cy',w.sy);
+    });
+    const ha=world[RIG.headBone];
+    head.setAttribute('cx',ha.x); head.setAttribute('cy',ha.y);
+
+    RIG.slots.forEach(s=>{
+      const b=world[s.bone];
+      let x = b.sx + (b.x-b.sx)*s.t;
+      let y = b.sy + (b.y-b.sy)*s.t;
+      if(s.off){
+        const dx=b.x-b.sx, dy=b.y-b.sy, len=Math.hypot(dx,dy)||1;
+        x += (-dy/len)*s.off; y += (dx/len)*s.off;
+      }
+      slotEls[s.id].setAttribute('transform',`translate(${x},${y})`);
+
+      if(s.art && artEls[s.id]){
+        const ab = world[s.art.bone];
+        const at = s.art.t;
+        const ax = ab.sx + (ab.x-ab.sx)*at;
+        const ay = ab.sy + (ab.y-ab.sy)*at;
+        const rot = ab.angle + (s.art.rotationOffset||0);
+        const anchor = s.art.anchor || {x:0.5,y:0.5};
+        const ox = anchor.x*s.art.w, oy = anchor.y*s.art.h;
+        artEls[s.id].setAttribute('transform', `translate(${ax},${ay}) rotate(${rot}) translate(${-ox},${-oy})`);
+      }
+    });
+
+    updateEffect(t, animate);
+    statusEl.textContent = activeMove ? (moveKind==='attack' ? 'Attack' : 'Self buff') : 'Idle / gait';
+  }
+
+  let animate=true;
+  const t0=performance.now();
+  function frame(now){
+    render((now-t0)/1000, animate);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const btn=document.getElementById('toggle-anim');
+  btn.addEventListener('click', ()=>{
+    animate=!animate;
+    btn.textContent = animate ? 'Pause (view stance)' : 'Resume movement';
+  });
+
+  let showMarkers=true;
+  const markerBtn=document.getElementById('toggle-markers');
+  markerBtn.addEventListener('click', ()=>{
+    showMarkers=!showMarkers;
+    Object.values(slotEls).forEach(el=>el.setAttribute('display', showMarkers?'inline':'none'));
+    markerBtn.textContent = showMarkers ? 'Hide attachment markers' : 'Show attachment markers';
+  });
+
+  let showArt=true;
+  const artBtn=document.getElementById('toggle-art');
+  artBtn.addEventListener('click', ()=>{
+    showArt=!showArt;
+    Object.values(artEls).forEach(el=>el.setAttribute('display', showArt?'inline':'none'));
+    artBtn.textContent = showArt ? 'Hide art overlay' : 'Show art overlay';
+  });
+
+  document.getElementById('btn-idle').addEventListener('click', ()=>{ activeMove=null; moveKind=null; });
+  document.getElementById('btn-attack').addEventListener('click', ()=>trigger('attack'));
+  document.getElementById('btn-buff').addEventListener('click', ()=>trigger('buff'));
+})();
+</script>
