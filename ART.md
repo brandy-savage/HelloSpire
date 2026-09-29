@@ -69,6 +69,18 @@ python tools/gen_character_art.py gunslinger --motif star   --color d4703c
 This is scaffolding, not final art. Its value is correct sizes and visual distinctness so
 real art can drop straight in.
 
+## Face tokens (map marker and top-panel chip)
+
+`tools/gen_face_tokens.py` crops each character's face out of its portrait
+(`art_reference/<character>/portrait.png`, or the Gunslinger's `char_select.png`) into a round
+token: `map_marker.png` for every character, plus `character_icon.png` and its outline for the
+Gunslinger. Face centre and crop radius per character are at the top of the script.
+
+```
+python tools/gen_face_tokens.py              # all three
+python tools/gen_face_tokens.py gunslinger
+```
+
 ## Generating the Gunslinger's power and relic icons
 
 `tools/gen_gunslinger_icons.py` is not scaffolding — it *is* the art. Every icon is a handful of

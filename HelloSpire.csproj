@@ -113,6 +113,9 @@
             <SpineFiles Include="spine\**\*" Exclude="spine\**\*.import" />
         </ItemGroup>
         <Message Text="Copying spine rigs to mods folder." Importance="high" />
+        <!-- Replace, don't merge: a rig that changes donor (ironclad -> silent) would otherwise
+             leave the old .atlas behind, and a stale rig beside the new one is ambiguous. -->
+        <RemoveDir Directories="$(ModsPath)$(MSBuildProjectName)/spine" />
         <Copy SourceFiles="@(SpineFiles)"
               DestinationFolder="$(ModsPath)$(MSBuildProjectName)/spine/%(RecursiveDir)" />
     </Target>

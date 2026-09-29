@@ -62,7 +62,7 @@ internal static class CharacterSkeletons
                            "incomplete install? Falling back to the shader repaint.");
             return null;
         }
-        var atlasPath = Directory.GetFiles(dir, "*.atlas").FirstOrDefault();
+        var atlasPath = AtlasIn(dir);
         if (atlasPath == null) return null;
         var skelPath = Path.ChangeExtension(atlasPath, ".skel");
         if (!File.Exists(skelPath)) return null;
@@ -87,6 +87,31 @@ internal static class CharacterSkeletons
         data.Set("skeleton_file_res", skelFile);
         GD.Print($"[HelloSpire] loaded custom skeleton for '{folder}' from {dir}");
         return new MegaSkeletonDataResource(data);
+    }
+
+    /// <summary>
+    /// The folder's rig atlas. SOURCE.json names the donor, and that is the atlas to load:
+    /// an install updated by copying over the old one can still hold a previous donor's
+    /// .atlas (the stick-figure ironclad.atlas beside silent.atlas), and "first *.atlas"
+    /// picks it alphabetically.
+    /// </summary>
+    private static string? AtlasIn(string dir)
+    {
+        var atlases = Directory.GetFiles(dir, "*.atlas");
+        if (atlases.Length > 1)
+        {
+            try
+            {
+                var source = Json.ParseString(File.ReadAllText(Path.Combine(dir, "SOURCE.json"))).AsGodotDictionary();
+                var donor = source["donor"].AsString();
+                var named = atlases.FirstOrDefault(a => Path.GetFileNameWithoutExtension(a) == donor);
+                if (named != null) return named;
+            }
+            catch { /* no or unreadable SOURCE.json: fall through */ }
+            GD.PushWarning($"[HelloSpire] {atlases.Length} atlases in {dir} — stale install? " +
+                           "Delete the folder and redeploy.");
+        }
+        return atlases.OrderBy(a => a).FirstOrDefault();
     }
 
     [HarmonyPostfix]
