@@ -2,7 +2,7 @@
 
 Everything under `spine/<character>/` is a **build output** of the character workbench,
 [sts2-reskin-pipeline](https://github.com/r0zar/sts2-reskin-pipeline). So are the three
-`HelloSpire/shaders/<character>_repaint.gdshader` files. Each `spine/<character>/SOURCE.json`
+`HelloSpire/shaders/<character>_repaint.gdshader` files. Each `spine/<character>/SOURCE.txt`
 records the workbench commit, donor rig and content hashes that produced the folder.
 
 The workbench is the **only** source of truth for what a character looks like:

@@ -90,7 +90,7 @@ internal static class CharacterSkeletons
     }
 
     /// <summary>
-    /// The folder's rig atlas. SOURCE.json names the donor, and that is the atlas to load:
+    /// The folder's rig atlas. SOURCE.txt names the donor, and that is the atlas to load:
     /// an install updated by copying over the old one can still hold a previous donor's
     /// .atlas (the stick-figure ironclad.atlas beside silent.atlas), and "first *.atlas"
     /// picks it alphabetically.
@@ -102,12 +102,12 @@ internal static class CharacterSkeletons
         {
             try
             {
-                var source = Json.ParseString(File.ReadAllText(Path.Combine(dir, "SOURCE.json"))).AsGodotDictionary();
+                var source = Json.ParseString(File.ReadAllText(Path.Combine(dir, "SOURCE.txt"))).AsGodotDictionary();
                 var donor = source["donor"].AsString();
                 var named = atlases.FirstOrDefault(a => Path.GetFileNameWithoutExtension(a) == donor);
                 if (named != null) return named;
             }
-            catch { /* no or unreadable SOURCE.json: fall through */ }
+            catch { /* no or unreadable SOURCE.txt: fall through */ }
             GD.PushWarning($"[HelloSpire] {atlases.Length} atlases in {dir} — stale install? " +
                            "Delete the folder and redeploy.");
         }

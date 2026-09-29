@@ -237,7 +237,7 @@ stance set by skeleton edits. The shop swaps to the same rig (`Characters/RoomSk
 `Characters/CharacterSkins.cs` repaints only the rest-site and energy-counter art (still borrowed
 from the Ironclad) through a per-character shader, which is also the shop's fallback.
 
-**Every one of those files is generated.** The rigs, the shaders and the `SOURCE.json` beside each
+**Every one of those files is generated.** The rigs, the shaders and the `SOURCE.txt` beside each
 rig all come out of the character workbench, [sts2-reskin-pipeline](https://github.com/r0zar/sts2-reskin-pipeline),
 from one set of inputs: donor choice, palette rules, skeleton edits, replacement part art. See
 `spine/README.md`. Do not paint a page, edit a shader or tweak a `.skel` in this repo — change the
