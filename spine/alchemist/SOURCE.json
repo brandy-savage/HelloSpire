@@ -1,14 +1,14 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
  "variant": "stick",
- "workbench_commit": "f01144d",
+ "workbench_commit": "a3278b0",
  "character": "alchemist",
  "donor": "necrobinder",
- "edits_sha256": "e93bbde249ad1daec85cca627ebb216e68fdb3224b64b7832541dfb69544b6e8",
+ "edits_sha256": "43cf7c8f9c582b613aaf0184399564f2ed6ff3c7cf5c21b566d70fe099ff1bcb",
  "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
  "files": {
   "necrobinder.atlas": "a982de309b26d9bd611cebfd4f99c16540cfa6d3b5049b57d3681a1461f3847d",
-  "necrobinder.skel": "19a33c80e22b9d78255d972194670fca78c8fcb1f0d81e690555160134fbb385",
+  "necrobinder.skel": "01af3b91df8d8ea6449f9082207e9a5e56f32cb59a742633cdce9adf0ac3e206",
   "necrobinder.png": "38a985f897c97d48b3f572c28bd27866481a4b3e51f39b8a9df6d43d3b452bac",
   "stick.png": "0375b20854f32a37e39ada7d4afb8ecdac04dba7a9aaf90c1a636c3e4f977035"
  }
