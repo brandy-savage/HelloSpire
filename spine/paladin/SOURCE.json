@@ -1,6 +1,7 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
- "workbench_commit": "5534cd8",
+ "variant": "dressed",
+ "workbench_commit": "9ad2f1a",
  "character": "paladin",
  "donor": "ironclad",
  "edits_sha256": "9391b5becb7034a1b5e3c7fb111eaae41b3c8a4a6f76781b114f7674b6d3a43c",

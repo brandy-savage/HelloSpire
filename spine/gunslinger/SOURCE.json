@@ -1,6 +1,7 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
- "workbench_commit": "9225d0e",
+ "variant": "dressed",
+ "workbench_commit": "9ad2f1a",
  "character": "gunslinger",
  "donor": "silent",
  "edits_sha256": "0dcaffd131604b66f73476797a989998ba6acd4b69d3463b23e93af938ca2ef2",

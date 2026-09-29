@@ -1,6 +1,7 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
- "workbench_commit": "5534cd8",
+ "variant": "dressed",
+ "workbench_commit": "9ad2f1a",
  "character": "alchemist",
  "donor": "necrobinder",
  "edits_sha256": null,
