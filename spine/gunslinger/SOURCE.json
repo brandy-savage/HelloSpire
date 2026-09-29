@@ -4,11 +4,11 @@
  "workbench_commit": "9ad2f1a",
  "character": "gunslinger",
  "donor": "silent",
- "edits_sha256": "0dcaffd131604b66f73476797a989998ba6acd4b69d3463b23e93af938ca2ef2",
+ "edits_sha256": null,
  "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
  "files": {
   "silent.atlas": "44cb6ea6945c0ab6e846310c4dfbdae88be2e68bad8ede1af1b4ab835fd16da3",
-  "silent.skel": "51c2d44dc8de5bdac52243a61bc5752579bcc756fa910aeb945ba8579c2c3ef3",
+  "silent.skel": "17294850ae4e0b397b4dc2733af03d2b0d53d88fa504ad69a36d68bb2bbac6b0",
   "silent.png": "33668fdee59ea9f829e6fe900abab9a7e2bd2d185851ebaa354c2a6dceefab3c"
  }
 }
