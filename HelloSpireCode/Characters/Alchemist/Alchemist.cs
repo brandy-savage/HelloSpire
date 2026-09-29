@@ -17,13 +17,16 @@ public class Alchemist : PlaceholderCharacterModel
     /// <summary>Asset subfolder under images/charui/ for this character's UI.</summary>
     public const string AssetFolder = "alchemist";
 
-    public static readonly Color Color = new("b5824a");
+    /// <summary>Toxic green — matches the v0 rig palette and the character-select art.</summary>
+    public static readonly Color Color = new("6ad48a");
 
     /// <summary>The Silent's rig fits the wiry alchemist far better than the Ironclad's bulk.
     /// Drives combat body, rest-site and shop scenes, trail, energy counter and sfx.</summary>
     public override string PlaceholderID => "silent";
 
     public override Color NameColor => Color;
+    /// <summary>Map-screen pen: the class primary colour, so co-op scribbles are attributable.</summary>
+    public override Color MapDrawingColor => Color;
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 68;
 

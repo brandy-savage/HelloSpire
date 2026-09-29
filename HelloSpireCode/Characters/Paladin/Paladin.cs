@@ -21,6 +21,8 @@ public class Paladin : PlaceholderCharacterModel
     public static readonly Color Color = new("e8c46a");
 
     public override Color NameColor => Color;
+    /// <summary>Map-screen pen: the class primary colour, so co-op scribbles are attributable.</summary>
+    public override Color MapDrawingColor => Color;
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 75;
 

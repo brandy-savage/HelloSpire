@@ -33,6 +33,8 @@ public class Gunslinger : PlaceholderCharacterModel
     public static readonly Color Color = new("d9a05b");
 
     public override Color NameColor => Color;
+    /// <summary>Map-screen pen: the class primary colour, so co-op scribbles are attributable.</summary>
+    public override Color MapDrawingColor => Color;
     public override CharacterGender Gender => CharacterGender.Neutral;
 
     /// <summary>Middling HP: the Gunslinger defends in layers rather than by having a big pool.</summary>
