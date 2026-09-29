@@ -1,15 +1,15 @@
 {
  "generated_by": "sts2-reskin-pipeline/tools/package.py \u2014 do not hand-edit these files",
  "variant": "dressed",
- "workbench_commit": "9ad2f1a",
+ "workbench_commit": "d3abefc",
  "character": "paladin",
  "donor": "ironclad",
- "edits_sha256": "9391b5becb7034a1b5e3c7fb111eaae41b3c8a4a6f76781b114f7674b6d3a43c",
+ "edits_sha256": null,
  "palettes_sha256": "64dfbe0acbd07b71b471ff05c996e20fe1933fa5e26f6fccc8a04b9af6c02a29",
  "files": {
   "ironclad.atlas": "50c4cb3983435e085fdac6a5dbe73fb6c31e854cb1264f2191e08893b65a15e6",
-  "ironclad.skel": "781d2755c1e38abf7d163b14c9e9ae4ecac82965dd5c835713a00f7a5ca42fbc",
-  "ironclad.png": "6e9fc28e81858842b99d452fa06fb2ae7241f12ff612f12810ec8a9677e5f0f1",
+  "ironclad.skel": "f31952dff5790e358e1229b62dac0623db6947d7550db47df7905395c50782dd",
+  "ironclad.png": "14822356b12e0368a39a8b4a4df410fd9f064bd729bbdae8d34aaac89d662ee2",
   "ironclad_2.png": "964798559aaf1492cfdd7d407763e34e473b706c1f7e094b4b2e757ae3952c21",
   "ironclad_3.png": "3420ea5a6c45a91567a83f656f2f90c54c96871bcc2e80acea4fc88bb48bf6dc",
   "ironclad_4.png": "2767fd84932ab88d56a528cbd048fb0f99f3812b95c180bace10e2951f8e9477"
