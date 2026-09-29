@@ -85,7 +85,9 @@ Paste it into PowerShell (Start menu → "PowerShell"). [`tools/install-playtest
    between builds don't linger;
 4. installs BaseLib at the exact version `HelloSpire.json` declares, from BaseLib's own GitHub
    releases. If the tester already subscribes to BaseLib on the Workshop, it leaves BaseLib alone
-   and warns if a second copy is sitting in `mods/`.
+   and warns if a second copy is sitting in `mods/`;
+5. ends with **SUCCESS** or **FAILED: <reason>** and waits for Enter, so the window stays open
+   long enough to read (or copy into a bug report).
 
 To keep a whole group on one build even after you publish a newer one:
 
