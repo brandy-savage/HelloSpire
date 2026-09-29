@@ -1,8 +1,8 @@
 {
   "id": "HelloSpire",
-  "name": "HelloSpire",
+  "name": "Class Expansion Pack",
   "author": "Ross Ragsdale",
-  "description": "A three-character pack: The Paladin, The Alchemist, and The Gunslinger. Built as one mod so co-op groups only need to match a single gameplay-affecting dependency.",
+  "description": "Three new classes for co-op or solo: the Paladin, the Gunslinger and the Alchemist, shipped as one mod so a lobby only has to match a single gameplay-affecting dependency. Requires BaseLib 3.4.5 exactly.",
   "version": "v0.0.1",
   "min_game_version": "0.107.0",
   "has_pck": true,
