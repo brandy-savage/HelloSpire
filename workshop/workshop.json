@@ -1,5 +1,5 @@
 {
-  "title": "Class Expansion Pack - Paladin, Gunslinger & Alchemist",
+  "title": "Character Expansion Pack - Paladin, Gunslinger & Alchemist",
   "description": "Three new classes for co-op or solo: the Paladin, the Gunslinger and the Alchemist, shipped as one mod so a lobby only has to match a single gameplay-affecting dependency.\n\nEarly playtest build (v0.0.1) against game v0.107.1. Requires BaseLib 3.4.5 exactly; 3.4.6+ is not yet supported. Character bodies are recoloured base-game rigs for now; some card and relic art is placeholder; balance is in progress. Everyone in a co-op lobby must be on the same version.",
   "visibility": "unlisted",
   "changeNote": "v0.0.1: first playtest build. Requires BaseLib 3.4.5.",
