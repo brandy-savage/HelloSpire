@@ -24,14 +24,14 @@ void fragment() {
     vec3 hsv = rgb2hsv(tex.rgb);
     float hd = hsv.x * 360.0;
     if ((hd >= 335.0 || hd < 25.0) && hsv.y >= 0.45 && hsv.z >= 0.55) {
-        // rage glow -> magenta
-        hsv = vec3(310.0 / 360.0, hsv.y, min(1.0, hsv.z * 1.05));
+        // rage glow -> toxic green
+        hsv = vec3(118.0 / 360.0, hsv.y, hsv.z);
     } else if ((hd >= 330.0 || hd < 22.0) && hsv.y >= 0.25) {
-        // maroon cloth -> cyan
-        hsv = vec3(185.0 / 360.0, min(1.0, hsv.y * 1.1), hsv.z);
+        // maroon cloth -> deep green
+        hsv = vec3(140.0 / 360.0, min(1.0, hsv.y * 0.85), hsv.z);
     } else if ((hd >= 22.0 && hd < 52.0) && hsv.y >= 0.28) {
-        // leather -> seafoam
-        hsv = vec3(155.0 / 360.0, min(1.0, hsv.y * 0.9), min(1.0, hsv.z * 1.15));
+        // leather -> lime
+        hsv = vec3(95.0 / 360.0, min(1.0, hsv.y * 0.9), hsv.z);
     }
     COLOR = vec4(hsv2rgb(hsv), tex.a);
 }
