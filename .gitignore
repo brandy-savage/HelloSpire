@@ -13,3 +13,9 @@ Directory.Build.props
 # card editor (local dev tool)
 card-editor/node_modules/
 card-editor/dist/
+
+# Release zips from tools/package-release.py
+dist/
+# ModUploader workspace: workshop.json, image.png and mod_id.txt are tracked; the build is not
+workshop/content/
+workshop/mod-uploader.log

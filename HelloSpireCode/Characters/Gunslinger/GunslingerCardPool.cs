@@ -11,10 +11,9 @@ public class GunslingerCardPool : CustomCardPoolModel
     public override string BigEnergyIconPath => "big_energy.png".CharacterUiPath(Gunslinger.AssetFolder);
     public override string TextEnergyIconPath => "text_energy.png".CharacterUiPath(Gunslinger.AssetFolder);
 
-    // TODO(Phase 1): tune the card-back tint for this character.
-    public override float H => 1f;
-    public override float S => 1f;
-    public override float V => 1f;
+    // The card frame is a shader tint over the base (Ironclad-red) frame, driven from the
+    // character colour — same as the Paladin and Alchemist pools.
+    public override Color ShaderColor => Gunslinger.Color;
 
     public override Color DeckEntryCardColor => Gunslinger.Color;
 

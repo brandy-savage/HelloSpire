@@ -10,15 +10,15 @@ Every API name here was verified against **game v0.107.1** (`data_sts2_windows_x
 
 ## Status (2026-09-28)
 
-All three characters are content-complete in code and playable end to end: **280 cards, 24 relics,
+All three characters are content-complete in code and playable end to end: **280 cards, 26 relics,
 31 potions, 75 powers.** Every card has a working upgrade; the only card without an `OnUpgrade` is
 `VolatileResidue`, a Status card, which is correct.
 
 | | Cards | Relics | Potions | Powers | Card art |
 |---|---:|---:|---:|---:|---|
-| Paladin | 86 | 6 | 3 | 35 | 80/86 unique (three pairs share an image) |
-| Alchemist | 90 | 9 | 25 | 19 | 50/90 (5 placeholder tiles, 35 no file) |
-| Gunslinger | 104 | 9 | 3 | 21 | 85/104 unique (18 placeholder tiles, 1 borrowed) |
+| Paladin | 86 | 8 | 3 | 35 | 86/86 unique |
+| Alchemist | 90 | 9 | 25 | 19 | 90/90 unique |
+| Gunslinger | 104 | 9 | 3 | 21 | 104/104 unique |
 
 The 2026-08-30 "Reset" note this replaced is long superseded — the Paladin was rebuilt past it into
 the 86-card Plating/Seals/Spirit set. The Faith system, and Judged / Warded / Blessed, stayed cut;
@@ -34,29 +34,29 @@ outstanding. A "Decide X only if…" item counts as done when the answer was "no
 The open boxes from every phase below, grouped by kind.
 
 **Art**
-- **65 card portraits.** The README's "⚠️ Cards missing unique art" section lists every card, file name and size: Alchemist 40, Gunslinger 19 (including **Thumb the Gate**, on borrowed art, and **Powder Burn**), and Paladin 6 (three pairs sharing an image).
-- No `beta/` (upgraded-card) art exists for any of the 280 cards.
-- Relic art: the `AlchemicalSatchel` icon, 9 Alchemist relic detail images, and 3 Paladin relic detail images.
-- Gunslinger card-back tint is still the identity (`H`/`S`/`V` = 1 with a `TODO(Phase 1)` in `GunslingerCardPool.cs`).
+- ~~**65 card portraits.**~~ — done 2026-09-28: 62 generated with `../image_gen_pipeline` (Alchemist 40, Gunslinger 19, one of each Paladin pair); the README's "Card art" names the few worth a second pass.
+- No `beta/` art exists for any of the 280 cards. `BetaPortraitPath` falls back to the normal portrait, so nothing looks broken; this is only needed if the game's beta-art option should show something different.
+- ~~Relic art: the `AlchemicalSatchel` icon, 9 Alchemist relic detail images, and 3 Paladin relic detail images.~~ — done 2026-09-28; see ART.md's "Paladin relic icons" and "Alchemist relic icons".
+- ~~Gunslinger card-back tint is still the identity.~~ — `GunslingerCardPool` now sets `ShaderColor => Gunslinger.Color`, like the other two pools. ⚠️ Not yet compiled or seen in game.
 - Rest-site bodies are still shader repaints of the placeholder's scene; the shop now swaps to each character's own rig. That shop change is unverified in game.
 - Nothing character-specific for SFX, arm (rock/paper/scissors/pointing) textures, card trail or character-select transition; all are inherited from Ironclad.
 
 **Bugs**
 - Stray code or tags reported at the bottom of some cards, mostly the Gunslinger's. Quickdraw Legend's was found and fixed; the rest need naming in game (the files themselves check clean).
-- 35 card descriptions contain a literal number where the rules call for a `{Var:diff()}` (listed under Phase 4).
+- ~~35 card descriptions contain a literal number where the rules call for a `{Var:diff()}`.~~ — audited 2026-09-28; two were real bugs and are fixed (see Phase 4). The other 33 are correct as written.
 
 **Character shell**
 - `StartingGold`, `DialogueColor`, `SpeechBubbleColor`, `MapDrawingColor`, `RemoteTargetingLineColor`/`Outline`, `EnergyLabelOutlineColor` and the anim delays are all inherited from the placeholder rather than set per character.
 
 **Content**
-- Paladin has 6 relics against the base game's 8, and no Uncommon or Shop relic.
+- ~~Paladin has 6 relics against the base game's 8, and no Uncommon or Shop relic.~~ — Judge's Gavel (Uncommon) and Tithing Box (Shop) added 2026-09-28, with art. ⚠️ Not yet compiled or playtested.
 
 **Verification and testing**
 - The eight inferred Ancient IDs (`gen_ancient_dialogue.py check --base …`).
 - Every playtest, balance and multiplayer check in Phases 3, 4, 8 and 9 — none is recorded as done.
 
 **Release**
-- Version is still `v0.0.0`, no git tags, nothing published.
+- Version is still `v0.0.0`, no git tags, nothing published. The tooling now exists: `PUBLISHING.md` covers the GitHub release, the one-line playtest installer and the Steam Workshop upload.
 
 See the README's "Known gaps" for per-file detail.
 
@@ -111,7 +111,7 @@ Base-game values, read directly out of `sts2.dll` for reference:
 - [ ] ⚠️ `MapDrawingColor`
 - [ ] ⚠️ `RemoteTargetingLineColor` / `RemoteTargetingLineOutline` — multiplayer targeting
 - [ ] ⚠️ `EnergyLabelOutlineColor`
-- [ ] ⚠️ Card-back HSV in `HelloSpireCardPool` (`H`/`S`/`V`), or supply a `CustomFrame` texture instead. *Paladin and Alchemist are done via `ShaderColor`; the Gunslinger's is still the identity 1/1/1.*
+- [x] ~~Card-back HSV in `HelloSpireCardPool` (`H`/`S`/`V`), or supply a `CustomFrame` texture instead.~~ — all three via `ShaderColor` (the Gunslinger's added 2026-09-28; ⚠️ not yet seen in game).
 
 ### Localization
 
@@ -132,7 +132,7 @@ The single highest-leverage balance decision in the whole character. A player se
 - [x] ~~Decide the starter deck ratio. 5 Strike / 5 Defend is the default; deviating is a strong statement (Necrobinder and Defect both do).~~ — 4 Strike / 4 Defend + 2 signature cards for all three
 - [x] ~~**Add 1–2 signature starter cards** that teach the mechanic on turn one.~~ — Paladin `Prayer`/`Smite`, Gunslinger `Reload`/`QuickDraw`, Alchemist `Infusion`/`AegisFormula`. This is how a character introduces itself. If your mechanic isn't visible in the opening hand, players won't find it.
 - [x] ~~**Design the starting relic.** `RelicRarity.Starter`. It should encode the fantasy, not just give stats. Burning Blood (heal on combat end) *is* the Ironclad's attrition identity in one relic.~~
-- [x] ~~Replace `BurningBlood` in `StartingRelics`.~~ Paladin `ConsecratedPlate`, Gunslinger `OldIron`, Alchemist `AlchemicalSatchel` — ⚠️ the last of which still has no icon art.
+- [x] ~~Replace `BurningBlood` in `StartingRelics`.~~ Paladin `ConsecratedPlate`, Gunslinger `OldIron`, Alchemist `AlchemicalSatchel`, all with icon art.
 - [x] ~~`StartingPotions` — usually empty; override only for a deliberate reason.~~ — left empty
 
 **Sanity check:** play 10 Act 1 openings with only the starter deck. If you can't reliably clear the first three fights, it's too weak. If you never take damage, it's too strong.
@@ -224,8 +224,8 @@ For every card:
 - [x] ~~`[Pool(typeof(<Name>CardPool))]` is inherited from the base — don't re-annotate~~
 - [x] ~~Upgrade defined (what `+` does). Prefer "meaningfully better" over "+2 damage" on at least a third of the set.~~ — 279/280; `VolatileResidue` is a Status card
 - [x] ~~Localization entry: `HELLOSPIRE-CARD_NAME.title` and `.description`~~ — all 280; every `{Var}` in them resolves to a var the card defines
-- [ ] ⚠️ Description uses the game's formatting variables (`{Damage:diff()}`, `{Block:diff()}`) so upgrades and Strength show correctly — **hardcoded numbers in descriptions are a bug**, they won't reflect buffs. *35 descriptions still contain a literal number; some are deliberate fixed riders ("Tithe: gain 3 Block"), so audit which should be vars:* `HOLY_LIGHT`, `SEAL_OF_WISDOM`, `SEAL_OF_THE_MARTYR`, `COMFORT`, `DIVINE_PURPOSE`, `SHIELD_OF_THE_RIGHTEOUS`, `ZEAL`, `CIRCLE_OF_HEALING`, `RENEW`, `HOLY_SHIELD`, `WAKE_OF_ASHES`, `BLESSING_OF_PROTECTION`, `DIVINE_SHIELD`, `SEAL_OF_THE_CRUSADER`, `DIVINE_INTERVENTION`, `AEGIS_OF_LIGHT`, `DIVINE_HYMN`, `TYRS_DELIVERANCE`, `QUICK_SILVER`, `SMELT_THE_WEAK`, `FALSE_BOTTOM`, `PERFECT_SOLVENT`, `SEAL_OF_LIGHT`, `SEAL_OF_RIGHTEOUSNESS`, `SEAL_OF_FORTITUDE`, `CHASTISE`, `VENGEFUL_MENDING`, `BLESSING_OF_FAITH`, `HEALING_WORD`, `PRAYER`, `VOLATILE_REAGENT`, `SOLVENT_FLASK`, `BREWED_EDGE`, `BREW_UNDER_PRESSURE`, `REAGENT_RECOVERY`
-- [ ] ⚠️ Art at `card_portraits/card_name.png` (1000×760 normal, 606×852 full-art; 250×190 / 250×350 small variants). *65 cards lack unique art; see the README's "⚠️ Cards missing unique art".*
+- [x] ~~Description uses the game's formatting variables (`{Damage:diff()}`, `{Block:diff()}`) so upgrades and Strength show correctly — **hardcoded numbers in descriptions are a bug**, they won't reflect buffs.~~ — audited 2026-09-28. The 35 descriptions with a literal number were checked against their code. Two were real bugs and are fixed: `DIVINE_INTERVENTION`'s "10 Block" is Dexterity-affected (`ValueProp.Move`), so it is now a `BlockVar` shown as `{Block:diff()}`; `VENGEFUL_MENDING` used `{Heal}` where every other heal card uses `{Heal:diff()}`. The other 33 are correct as written: every literal is a fixed rider that no upgrade changes and no buff touches (Tithe Block and damage are `Unpowered`, Seal payoffs are `Unpowered` constants, and the rest are draw, discard, Energy, Weak and Spirit counts).
+- [x] ~~Art at `card_portraits/card_name.png` (1000×760 normal, 606×852 full-art; 250×190 / 250×350 small variants).~~ — every card has unique art as of 2026-09-28.
 - [x] ~~Keywords set where relevant~~
 - [ ] ⚠️ Plays correctly with zero energy, at max hand size, and when the target dies mid-effect. *Not recorded as tested.*
 
@@ -264,10 +264,10 @@ Base game ships **298 relics**, but the split is the surprising part:
 **Every character gets exactly 8 character-specific relics.** The overwhelming majority of relics are shared or event relics that any character can find. This is a much smaller scope than it first appears — don't over-build here.
 
 - [x] ~~Starting relic *(Phase 2)*~~
-- [ ] ⚠️ **8 character-specific relics** to match base-game parity. *Gunslinger 9 and Alchemist 9 are done; the Paladin has 6.*
-- [ ] ⚠️ Rarity spread: `RelicRarity` is `Starter`, `Common`, `Uncommon`, `Rare`, `Shop`, `Event`, `Ancient`. *Gunslinger and Alchemist span Starter through Shop; the Paladin has only Starter, Common and Rare.*
+- [x] ~~**8 character-specific relics** to match base-game parity.~~ — Gunslinger 9, Alchemist 9, Paladin 8 (Judge's Gavel and Tithing Box added 2026-09-28; ⚠️ not yet compiled or playtested).
+- [x] ~~Rarity spread: `RelicRarity` is `Starter`, `Common`, `Uncommon`, `Rare`, `Shop`, `Event`, `Ancient`.~~ — all three span Starter through Shop.
 - [x] ~~At least 2 that interact with your custom mechanic specifically~~
-- [ ] ⚠️ Each has: `PackedIconPath`, `PackedIconOutlinePath`, `BigIconPath`, and loc entries. *Missing: the `AlchemicalSatchel` icon, all 9 Alchemist detail images, and 3 Paladin detail images (`ChainedGauntlet`, `HolyBook`, `LibramOfWrath`).*
+- [x] ~~Each has: `PackedIconPath`, `PackedIconOutlinePath`, `BigIconPath`, and loc entries.~~ — all 26, as of 2026-09-28.
 - [ ] ⚠️ **Avoid strictly-better-than-basegame relics.** They warp every run they appear in. *Not audited.*
 - [ ] ⚠️ Check each against the Act 1 boss relic pool — a relic that trivializes an early boss is a problem
 
@@ -331,9 +331,9 @@ Existing art-replacement mods worth studying for conventions: [Card Art Editor](
 - [x] ~~`map_marker_char_name.png`~~
 - [x] ~~`mod_image.png` (mod list / Workshop thumbnail)~~
 - [x] ~~`charui/big_energy.png` and `charui/text_energy.png`~~
-- [ ] ⚠️ Card frame or HSV tint. *Paladin and Alchemist are done; the Gunslinger's is still the identity tint.*
-- [ ] ⚠️ Card art for every card *(the long pole — budget for it early)*. *65 to go; see the README.*
-- [ ] ⚠️ Relic and potion icons. *All potions are done; the `AlchemicalSatchel` relic icon is missing.*
+- [x] ~~Card frame or HSV tint.~~ — all three via `ShaderColor`.
+- [x] ~~Card art for every card *(the long pole — budget for it early)*.~~ — 280/280 unique.
+- [x] ~~Relic and potion icons.~~ — all potions and relics, tray and tooltip sizes.
 - [ ] ⚠️ `CharacterSelectBg`, `CharacterSelectTransitionPath`. *All three have a background; none has a transition of its own.*
 - [ ] ⚠️ `RestSiteAnimPath`, `MerchantAnimPath` — the character appears at rest sites and shops. *The shop swaps to each character's own rig (`RoomSkins`, 2026-09-28; not yet seen in game). The rest site is still a shader repaint of the placeholder's scene.*
 - [ ] ⚠️ SFX: `AttackSfx`, `CastSfx`, `PowerUpSfx`, `DeathSfx`, `CharacterSelectSfx`, `CharacterTransitionSfx`. *All inherited from Ironclad.*

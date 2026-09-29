@@ -38,8 +38,8 @@ public abstract class SealPower : HelloSpirePower
 }
 
 /// <summary>
-/// A power that reacts to the Judge verb itself (Zealotry, Sanctified Wrath, Vow of Enmity,
-/// Avenging Crusader). Fires once per judge instance, seals banked or not.
+/// A power or relic that reacts to the Judge verb itself (Zealotry, Sanctified Wrath, Vow of
+/// Enmity, Avenging Crusader, Judge's Gavel). Fires once per judge instance, seals banked or not.
 /// </summary>
 public interface IJudgeTrigger
 {
@@ -83,11 +83,7 @@ public static class Seals
                     seal.Flash();
                     await seal.OnJudged(ctx, target);
                 }
-            foreach (var trigger in creature.Powers.OfType<IJudgeTrigger>().ToList())
-            {
-                (trigger as HelloSpirePower)?.Flash();
-                await trigger.OnJudgeInstance(ctx, target);
-            }
+            await FireJudgeTriggers(ctx, p, target);
         }
 
         foreach (var seal in bank)
@@ -113,14 +109,23 @@ public static class Seals
                         seal.Flash();
                         await seal.OnJudged(ctx, target);
                     }
-                foreach (var trigger in creature.Powers.OfType<IJudgeTrigger>().ToList())
-                {
-                    (trigger as HelloSpirePower)?.Flash();
-                    await trigger.OnJudgeInstance(ctx, target);
-                }
+                await FireJudgeTriggers(ctx, p, target);
             }
 
         foreach (var seal in bank)
             await PowerCmd.Remove(seal);
+    }
+
+    /// <summary>One judge instance's IJudgeTrigger pass: the owner's powers, then their relics.</summary>
+    private static async Task FireJudgeTriggers(PlayerChoiceContext ctx, Player p, Creature target)
+    {
+        foreach (var trigger in p.Creature.Powers.OfType<IJudgeTrigger>().ToList())
+        {
+            (trigger as HelloSpirePower)?.Flash();
+            await trigger.OnJudgeInstance(ctx, target);
+        }
+        // Relics flash themselves: a once-per-turn relic should not light up on the judges it ignores.
+        foreach (var trigger in p.Relics.OfType<IJudgeTrigger>().ToList())
+            await trigger.OnJudgeInstance(ctx, target);
     }
 }

@@ -17,7 +17,7 @@ public sealed class DivineIntervention() : PaladinCard(1, CardType.Skill, CardRa
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     public override bool GainsBlock => true;
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new SpiritHealVar(10m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new SpiritHealVar(10m), new BlockVar(10m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.Static(PaladinTips.Tithe)];
 
     public override bool HasTithe => true;
@@ -27,7 +27,7 @@ public sealed class DivineIntervention() : PaladinCard(1, CardType.Skill, CardRa
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         var wounded = PaladinEffects.MostWounded(Owner.Creature);
         await Spirit.Heal(Owner, wounded, DynamicVars.Heal.BaseValue);
-        await CreatureCmd.GainBlock(wounded, 10m, ValueProp.Move, cardPlay);
+        await CreatureCmd.GainBlock(wounded, DynamicVars.Block, cardPlay);
     }
 
     protected override async Task OnTithe(PlayerChoiceContext ctx) =>

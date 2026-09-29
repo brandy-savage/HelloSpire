@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
@@ -61,7 +62,15 @@ public abstract class PaladinCard(int cost, CardType type, CardRarity rarity, Ta
         await base.AfterCardDiscarded(choiceContext, card);
         if (card != this || !HasTithe) return;
         await OnTithe(choiceContext);
+        foreach (var listener in Owner.Relics.OfType<ITitheListener>().ToList())
+            await listener.OnTithed(choiceContext, this);
     }
+}
+
+/// <summary>A relic that reacts to a Tithe face triggering (Tithing Box). Fires after the Tithe effect.</summary>
+public interface ITitheListener
+{
+    Task OnTithed(PlayerChoiceContext ctx, PaladinCard card);
 }
 
 /// <summary>

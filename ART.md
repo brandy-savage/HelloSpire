@@ -121,6 +121,30 @@ which this script does draw.
 The `outline/` files are derived from the alpha of the fill art, exactly as relic `_outline` files
 are. Do not hand-edit them.
 
+## Paladin relic icons
+
+The Paladin's relics are flat objects on transparent, hand-drawn at 128px. `tools/gen_paladin_relic_icons.py`
+draws the ones that were missing as vector shapes, reusing `gen_gunslinger_icons.py`'s SVG and
+rendering helpers:
+
+```
+python tools/gen_paladin_relic_icons.py                  # all four
+python tools/gen_paladin_relic_icons.py --sheet /tmp/x.png
+```
+
+Judge's Gavel and Tithing Box get tray icon, `_outline` and `big/`. Chained Gauntlet and Libram of
+Wrath get `big/` only, with geometry traced from their existing tray icons so the two sizes match.
+Holy Book's `big/` art already existed as `big/libram_of_righteousness.png` from before the relic's
+rename, and was moved to the name the game asks for.
+
+## Alchemist relic icons
+
+The Alchemist's relics are painted, opaque 128px squares. Their `big/` art comes from
+`generate_relic_art.py` in `../image_gen_pipeline`, which sends each relic's own tray icon as the
+reference image and asks for a faithful redraw at 1024, so tray and tooltip show the same object.
+A relic with no icon yet (Alchemical Satchel) is painted fresh, steered by three sibling icons, and
+gets a tray icon and `_outline` too.
+
 ## Generating the missing power icons
 
 `tools/gen_power_icons.py` fills the pack's power-icon gap: the Alchemist's ten engine powers, the
