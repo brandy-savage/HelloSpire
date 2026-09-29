@@ -9,8 +9,9 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 namespace HelloSpire.HelloSpireCode.Characters.PaladinContent.Cards;
 
 /// <summary>
-/// Base for the eight seal cards: a Skill that arms a held stance. One seal at a time --
-/// Seals.Grant replaces whatever is held. The card's "Amount" var sizes the seal's passive;
+/// Base for the eight seal cards: a Skill that banks a charge of its seal. Seals stack (see
+/// SealPower) -- Seals.Grant adds a charge, and Judge cashes the whole bank. The card's "Amount"
+/// var sizes the seal's passive;
 /// upgrades raise it by 1 unless a card overrides.
 /// </summary>
 public abstract class SealCard(int cost, CardRarity rarity, decimal amount) :
